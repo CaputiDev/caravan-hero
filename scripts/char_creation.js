@@ -55,7 +55,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const arePointsSpent = (totalPoints === 0);
         const isNameEntered = charNameInput.value.trim() !== '';
-        startButton.disabled = !arePointsSpent || !isNameEntered;
+        startButton.disabled = !arePointsSpent || !isNameEntered;  
     }
 
     plusButtons.forEach(button => {
@@ -82,5 +82,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     charNameInput.addEventListener('input', updateUI);
 
+        startButton.addEventListener('click', ()=> {
+            window.location.href = "main.html";
+        });
+
     updateUI();
+
+    
+
+    
+
 });
