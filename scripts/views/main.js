@@ -1,4 +1,3 @@
-// Espera o HTML ser totalmente carregado
 document.addEventListener('DOMContentLoaded', () => {
 
 
@@ -56,6 +55,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     debugTeam.forEach(character => {
+        character.effects = [
+                // 1. Efeito de Buff (ativo)
+                { name: 'Buff de Ataque', icon: '⚔️', duration: 3 },
+                // 2. Efeito de Debuff (ativo)
+                { name: 'Envenenado', icon: '☠️', duration: 2 },
+                // 3. Efeito "inativo" (não vai aparecer)
+                { name: 'Escudo', icon: '🛡️', duration: 0 } 
+            ];
+        
         console.log(character);
         preencherTime(character);
         desenharPersonagemNaBatalha(character);
@@ -168,18 +176,61 @@ document.addEventListener('DOMContentLoaded', () => {
 }
 
 function desenharPersonagemNaBatalha(character) {
-        // Cria o HTML para a carta na batalha
+        
+        // --- Lógica para Efeitos ---
+        // Cria os ícones de efeito (se houver)
+        let effectsHTML = '';
+        if (character.effects && Array.isArray(character.effects)) {
+            character.effects.forEach(effect => {
+                // Só mostra o ícone se a duração for > 0
+                if (effect.duration > 0) {
+                    effectsHTML += `<div class="effect-icon" title="${effect.name} (${effect.duration} turnos)">
+                        ${effect.icon}
+                    </div>`;
+                }
+            });
+        }
+
         const newPlayerCardHTML = `
             <div class="player-card" data-member-id="${character.name}">
+                
                 <div class="player-name">${character.name}</div>
-                <div class="player-sprite"></div> <div class="player-stats-bar">
-                    <div class="hp-bar-player" style="width: 100%;"></div>
-                    <div class="mana-bar-player" style="width: 100%;"></div>
+                
+                <div class="player-sprite"></div>
+                
+                <div class="player-lvl">Lvl ${character.lvl}</div>
+                
+                <div class="player-stats-area">
+
+                    <div class="player-atk">
+                        ATK: ${character.currentStats.damage}
+                    </div>
+                
+                    <div class="stat-bar-container hp-bar">
+                        <div class="bar-text hp-text">
+                            ${character.currentStats.hp} / ${character.stats.hp}
+                        </div>
+                        <div class="armor-text">
+                            ${character.stats.armor}
+                        </div>
+                        <div class="hp-bar-fill" style="width: ${(character.currentStats.hp / character.stats.hp) * 100}%"></div>
+                    </div>
+
+                    <div class="stat-bar-container mana-bar">
+                        <div class="bar-text mana-text">
+                            ${character.currentStats.mana} / ${character.stats.mana}
+                        </div>
+                        <div class="mana-bar-fill" style="width: ${(character.currentStats.mana / character.stats.mana) * 100}%"></div>
+                    </div>
+
+                    <div class="player-effects">
+                        ${effectsHTML}
+                    </div>
+
                 </div>
             </div>
         `;
         
-        // Adiciona o novo HTML dentro da #player-area
         playerArea.innerHTML += newPlayerCardHTML;
     }
 });

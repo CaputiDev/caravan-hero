@@ -4,14 +4,20 @@ class PCharacter extends Character {
         super(name, attributes, lvl, tier); 
 
         this.experience = 0;
+        this.experienceGap = 100;
         this.inventory = [];
     }
 
     levelUp() {
+        if(this.lvl<=10){
         this.lvl += 1;
         this.recalculateAll();
-        console.log(`${this.name} subiu para o nível ${this.lvl}!`);
+        this.experienceGap = lvl * 100;
+        this.experience = 0;
         return this.lvl;
+        }else{
+            
+        }
     }
 
 }

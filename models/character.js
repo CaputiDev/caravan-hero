@@ -7,10 +7,15 @@ class Character {
 
         this.modifiers = null; 
         this.stats = null;
+        this.effects = [];
         this.tier = tier;
         
         this.recalculateAll(); 
+
+        //esses sao os stats atuais, como hp atual, atk atual etc
+        this.currentStats = this.stats;
     }
+
     recalculateAll() {
         this.modifiers = {
             "damage": 2 + this.lvl,
@@ -21,6 +26,7 @@ class Character {
             "skill": 1 + this.lvl,
         };
 
+        //esses stats n devem ser modificados diretamente, apenas utilizados para gerar outros stats,
         this.stats = {
             "damage" : this.modifiers['damage'] * this.attributes.atk * this.tier,
             "atkSpeed" : this.modifiers['atkSpeed'] * this.attributes.atk * this.tier,
@@ -29,6 +35,8 @@ class Character {
             "mana" : this.modifiers['mana'] * this.attributes.int * this.tier,
             "skill" : this.modifiers['skill'] * this.attributes.int * this.tier,
         };
+
+        this.currentStats = this.stats;
         
     }
 
