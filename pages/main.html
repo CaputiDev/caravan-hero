@@ -1,14 +1,94 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="../scripts/views/main.js"></script>
-    <script src="../models/Character.js"></script>
-    <script src="../models/PCharacter.js"></script>
-    <title>Game</title>
+    <title>Jogo Principal</title>
+    
+    <link rel="stylesheet" href="../styles/main.css">
+
+    <script src="../models/Character.js" defer></script>
+    <script src="../models/PCharacter.js" defer></script>
+    <script src="../models/Enemy.js" defer></script>
+    
+    <script src="../scripts/views/main.js" defer></script>
 </head>
 <body>
-    
+
+    <aside id="team-panel">
+        <div class="panel-title">Seu Time (0/6)</div>
+        
+        <div id="team-roster">
+            <div class="team-member-portrait empty-slot"></div>
+            <div class="team-member-portrait empty-slot"></div>
+            <div class="team-member-portrait empty-slot"></div>
+            <div class="team-member-portrait empty-slot"></div>
+            <div class="team-member-portrait empty-slot"></div>
+            <div class="team-member-portrait empty-slot"></div>
+        </div>
+
+        <div id="skills-icon" class="panel-icon" title="Habilidades Ativas">
+            📖 </div>
+    </aside>
+
+    <main id="battlefield">
+        <div id="enemy-area">
+            <div class="enemy-card" data-enemy-id="enemy1">
+                <div class="enemy-name">Goblin</div>
+                <div class="enemy-sprite"></div> <div class="hp-bar">
+                    <div class="hp-bar-current" style="width: 100%;"></div>
+                </div>
+            </div>
+            <div class="enemy-card" data-enemy-id="enemy2">
+                <div class="enemy-name">Lobo</div>
+                <div class="enemy-sprite"></div>
+                <div class="hp-bar">
+                    <div class="hp-bar-current" style="width: 100%;"></div>
+                </div>
+            </div>
+        </div>
+
+        <div id="player-area">
+            </div>
+    </main>
+
+    <div id="recruit-icon" class="panel-icon" title="Recrutar">
+        💰 </div>
+
+    <aside id="recruit-panel" class="side-panel hidden">
+        <button class="close-panel-btn" data-target-panel="recruit-panel">X</button>
+        <div class="panel-title">Mercenários</div>
+        <div class="panel-content">
+            <div class="mercenary-for-hire">
+                <span class="mercenary-name">Arqueiro Elfo</span>
+                <span class="mercenary-cost">Custo: 50 💰</span>
+                <button class="recruit-btn">Recrutar</button>
+            </div>
+            <div class="mercenary-for-hire">
+                <span class="mercenary-name">Guerreiro Anão</span>
+                <span class="mercenary-cost">Custo: 75 💰</span>
+                <button class="recruit-btn">Recrutar</button>
+            </div>
+        </div>
+    </aside>
+
+    <div id="skills-panel" class="modal-panel hidden">
+        <div class="modal-content">
+            <button class="close-panel-btn" data-target-panel="skills-panel">X</button>
+            <div class="panel-title">Habilidades Ativas</div>
+            <div class="panel-content">
+                <div class="active-skill">Cura Leve (Passiva)</div>
+                <div class="active-skill">Aura de Fogo (Ativa)</div>
+            </div>
+        </div>
+    </div>
+
+    <div id="enemy-tooltip" class="hidden">
+        <h4 id="tooltip-name">Nome do Inimigo</h4>
+        <p id="tooltip-desc">Descrição dos status ou buffs/debuffs.</p>
+        <p>HP: <span id="tooltip-hp">10/10</span></p>
+        <p>ATK: <span id="tooltip-atk">3</span></p>
+    </div>
+
 </body>
 </html>
