@@ -12,7 +12,7 @@ let enemy_team = [];
 
 //importação do personagem
 let firstCharData = localStorage.getItem('FirstCharData');
-if(firstCharData){
+if(firstCharData == null){
     localStorage.setItem(ID_COUNTER_KEY,1);
 
     firstCharData = JSON.parse(firstCharData);
