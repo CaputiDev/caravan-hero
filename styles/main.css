@@ -176,7 +176,7 @@ body {
 
 .player-card {
     width: 150px;
-    height: 260px; 
+    height: 300px; 
     background-color: var(--card-bg);
     border: 2px solid var(--border-color);
     border-radius: 10px;
@@ -237,7 +237,33 @@ body {
     color: var(--orange-color);
     text-align: center;
 }
+.player-action-bar {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    margin-bottom: 5px; /* Espaço entre os ícones e o nome */
+}
 
+.action-icon {
+    font-size: 1.5em; 
+    cursor: pointer;
+    padding: 5px;
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+    border: 2px solid transparent; /* Borda para o 'selected' */
+    transition: all 0.2s ease;
+}
+
+.action-icon:hover {
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.action-icon.selected {
+    border-color: var(--gold-color);
+    box-shadow: 0 0 10px var(--gold-color);
+    transform: scale(1.1);
+}
 /* Container (para Barras de HP e Mana) */
 .stat-bar-container {
     width: 100%;
@@ -480,9 +506,6 @@ body {
 
 /*ouro do jogador*/
 #player-gold-display {
-    position: absolute;
-    top: 20px;
-    right: 20px;
     background-color: var(--panel-bg);
     border: 2px solid var(--gold-color);
     border-radius: 8px;
@@ -490,9 +513,9 @@ body {
     font-size: 1.2em;
     font-weight: bold;
     color: var(--gold-color);
-    z-index: 50;
     box-shadow: 0 4px 10px rgba(0,0,0,0.5);
-    transition: right 0.5s ease-in-out;
+    
+    white-space: nowrap; 
 }
 body.shop-is-open #player-gold-display {
     right: 320px; 
@@ -533,4 +556,54 @@ body.shop-is-open #player-gold-display {
     font-weight: bold;
     color: var(--text-color); 
     text-shadow: 0 0 5px rgba(0,0,0,0.7);
+}
+#start-battle-btn {
+    background-color: var(--hp-color); 
+    color: white;
+    
+    font-size: 1.2em; 
+    font-weight: bold;
+    padding: 10px 15px; 
+    border-radius: 8px; 
+    
+    text-transform: uppercase;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+    transition: background-color 0.2s, transform 0.1s;
+    
+    white-space: nowrap; 
+}
+
+#start-battle-btn:hover:not(:disabled) {
+    background-color: #ff6b5a;
+    transform: scale(1.02); /* Removemos o translateX */
+}
+
+#start-battle-btn:active:not(:disabled) {
+    transform: scale(0.98); /* Removemos o translateX */
+}
+
+#start-battle-btn:disabled {
+    background-color: #555;
+    color: #999;
+    cursor: not-allowed;
+}
+#top-right-ui {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 50; /* O mesmo z-index que o ouro tinha */
+    
+    display: flex; /* Alinha os itens lado a lado */
+    align-items: center; /* Alinha verticalmente */
+    gap: 15px; /* Espaço entre o botão e o ouro */
+    
+    /* A animação de slide agora está neste container! */
+    transition: right 0.5s ease-in-out;
+}
+
+/* A regra de animação agora se aplica ao container */
+body.shop-is-open #top-right-ui {
+    right: 320px; 
 }

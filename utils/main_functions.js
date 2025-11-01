@@ -1,9 +1,57 @@
-function updateSquad(character){
-    drawCrew(character);
-    drawRoster(character);
-    }
 
-    //draws
+
+//logica e sistemas
+
+function checkBattleReady() {
+    const actionsSet = Object.keys(playerActions).length;
+    const teamSize = team.length;
+    
+    // Só permite começar se o time tiver membros
+    if (teamSize > 0 && actionsSet === teamSize) {
+        startBattleButton.disabled = false;
+        startBattleButton.textContent = "Começar Batalha!";
+    } else {
+        startBattleButton.disabled = true;
+        startBattleButton.textContent = `Selecione Ações (${actionsSet}/${teamSize})`;
+    }
+}
+
+function executeRound() {
+    if (startBattleButton.disabled) return;
+
+    console.log("Batalha Iniciada! Ações:", playerActions);
+    
+    // --- LÓGICA DO JOGO (FUTURO) ---
+    //chamaria a lógica de processar as 'playerActions'
+    //chamaria a IA para as ações inimigas
+    //atualizaria o 'team' (HP, mana, efeitos)
+    //chamaria a 'refreshAllUI()' para redesenhar tudo
+    //
+
+    // sistema de round
+    roundNumberSpan.textContent = GAME_MANAGER.passRound();
+    
+    // Limpa as ações para o próximo round
+    playerActions = {};
+    playerArea.querySelectorAll('.action-icon').forEach(icon => {
+        icon.classList.remove('selected');
+    });
+
+    // Desabilita o botão novamente
+    checkBattleReady();
+}
+
+//draws (desenha os estados atuais na tela)
+function refreshAllUI() {
+    team.forEach(character => {
+        updateSquad(character);
+    });
+    
+    /*enemyTeam.forEach(enemy =>{
+        updateEnemySquad(enemy);
+    })*/
+}
+
 function drawRoster(character) {
     if(!team.includes(character)){
         console.warn('Tentativa de adcionar personagem inexistente');
@@ -65,6 +113,11 @@ function drawCrew(character) {
     const existingCard = playerArea.querySelector(`.player-card[data-id="${character.id}"]`);
 
     const newInnerCardHTML = `
+    <div class="player-action-bar">
+            <div class="action-icon" data-action-type="melee" title="Ataque Básico">👊</div>
+            <div class="action-icon" data-action-type="skill" title="Habilidades">📜</div>
+            <div class="action-icon" data-action-type="rest" title="Descansar">💤</div>
+        </div>
         <div class="player-name">${character.name}</div>
         <div class="player-sprite"></div>
         <div class="player-lvl">Lvl ${character.lvl}</div>
@@ -104,6 +157,7 @@ function drawCrew(character) {
         `;
     }
 }
+
 function addCharToSquad(character) {
     if(team.includes(character)){
         console.warn(`Já existe no time! Não há necessidade de adicionar ${character.name}.`);
@@ -118,3 +172,12 @@ function addCharToSquad(character) {
     // Chama as funções de desenho
     updateSquad(character);
 }
+
+function updateSquad(character){
+    drawCrew(character);
+    drawRoster(character);
+    }
+
+/*function UpdateEnemySquad(){
+    //logica futura
+} */
