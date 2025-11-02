@@ -22,6 +22,7 @@ if(firstCharData != null){
 //caso o acesso seja feito sem a criação de um personagem(MODO DEBUG para testes de desenvolvimento)
 debugInit()
 }
+
 /*
 fazer sistema de rodadas
 

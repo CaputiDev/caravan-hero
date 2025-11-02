@@ -3,5 +3,6 @@ class Enemy extends Character{
         super(name, attributes, lvl, tier);
         
         this.xpGiven = lvl * 100 * tier;
+        this.description = '';
     }
 }
