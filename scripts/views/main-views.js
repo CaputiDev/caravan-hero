@@ -102,26 +102,27 @@ closeButtons.forEach(button => {
 
 // Interatividade do Tooltip do Inimigo
 enemyArea.addEventListener('mouseover', (event) => {
-    // Encontra o '.enemy-card' mais próximo que o mouse tocou
     const enemyCard = event.target.closest('.enemy-card');
     
     if (enemyCard) {
-        // --- LÓGICA FUTURA ---
-        // ID do inimigo (enemyCard.dataset.enemyId)
-        // e buscaria os dados dele para preencher o tooltip.
+        // 1. Pega o ID do card do inimigo
+        const enemyId = parseInt(enemyCard.dataset.id, 10);
         
-        // exemplos:
-        document.getElementById('tooltip-name').textContent = "Goblin";
-        document.getElementById('tooltip-desc').textContent = "Fraco contra fogo. Rápido.";
-        document.getElementById('tooltip-hp').textContent = "10/10";
-        document.getElementById('tooltip-atk').textContent = "3";
+        // 2. Encontra o objeto 'enemy' no array 'enemyTeam'
+        const enemy = enemyTeam.find(e => e.id === enemyId);
 
-        // Posiciona e mostra o tooltip
-        enemyTooltip.classList.remove('hidden');
-
-        // Posiciona o tooltip 10px abaixo e à direita do mouse
-        enemyTooltip.style.left = `${event.pageX + 10}px`;
-        enemyTooltip.style.top = `${event.pageY + 10}px`;
+        // 3. Se encontrou o inimigo, preenche o tooltip com seus dados
+        if (enemy) {
+            document.getElementById('tooltip-name').textContent = enemy.name;
+            document.getElementById('tooltip-desc').textContent = enemy.description; // <-- USANDO A DESCRIÇÃO!
+            document.getElementById('tooltip-hp').textContent = `${enemy.currentStats.hp}/${enemy.stats.hp}`;
+            document.getElementById('tooltip-atk').textContent = enemy.currentStats.damage;
+            
+            // Posiciona e mostra o tooltip
+            enemyTooltip.classList.remove('hidden');
+            enemyTooltip.style.left = `${event.pageX + 10}px`;
+            enemyTooltip.style.top = `${event.pageY + 10}px`;
+        }
     }
 });
 

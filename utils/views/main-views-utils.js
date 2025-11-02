@@ -136,6 +136,46 @@ function updateSquad(character){
     drawRoster(character);
     }
 
-/*function UpdateEnemySquad(){
-    //logica futura
-} */
+function drawEnemy(enemy) {
+    if(!enemyTeam.includes(enemy)){
+        console.warn('Tentativa de desenhar inimigo inexistente');
+        return;
+    }
+    
+    let effectsHTML = '';
+    if (enemy.effects && Array.isArray(enemy.effects)) {
+        enemy.effects.forEach(effect => {
+            if (effect.duration > 0) {
+                effectsHTML += `<div class="effect-icon" title="${effect.name} (${effect.duration} turnos)">
+                    ${effect.icon}
+                </div>`;
+            }
+        });
+    }
+
+    const existingCard = enemyArea.querySelector(`.enemy-card[data-id="${enemy.id}"]`);
+
+    const newInnerCardHTML = `
+        <div class="enemy-name">${enemy.name}</div>
+        <div class="enemy-sprite"></div>
+        <div class="hp-bar">
+            <div class="hp-bar-current" style="width: ${(enemy.currentStats.hp / enemy.stats.hp) * 100}%"></div>
+        </div>
+    `;
+
+    if (existingCard) {
+        // update
+        existingCard.innerHTML = newInnerCardHTML;
+    } else {
+        // add
+        enemyArea.innerHTML += `
+            <div class="enemy-card" data-id="${enemy.id}">
+                ${newInnerCardHTML}
+            </div>
+        `;
+    }
+}
+
+function UpdateEnemySquad(enemy){
+    drawEnemy(enemy);
+}

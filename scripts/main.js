@@ -1,7 +1,7 @@
 //var globais
-let team = [];
-let enemyTeam = [];
-let playerActions = {};
+window.team = [];
+window.enemyTeam = [];
+window.playerActions = {};
 
 //importação do personagem
 let firstCharData = localStorage.getItem('FirstCharData');
@@ -20,7 +20,7 @@ if(firstCharData != null){
     
 } else {
 //caso o acesso seja feito sem a criação de um personagem(MODO DEBUG para testes de desenvolvimento)
-debugInit()
+debugInit();
 }
 
 /*
