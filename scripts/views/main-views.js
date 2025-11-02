@@ -61,10 +61,10 @@ playerArea.addEventListener('click', (event) => {
     const characterId = card.dataset.id;
     const actionType = clickedIcon.dataset.actionType;
 
-    // 1. Armazena a ação escolhida no "Estado"
+    // Armazena a ação escolhida no "Estado"
     playerActions[characterId] = actionType;
 
-    // 2. Atualiza a UI (remove 'selected' de todos, adiciona no clicado)
+    // Atualiza a UI (remove 'selected' de todos, adiciona no clicado)
     card.querySelectorAll('.action-icon').forEach(icon => {
         icon.classList.remove('selected');
     });

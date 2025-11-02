@@ -1,4 +1,8 @@
 //arquivo temporario de testes
+window.debugTeam = [
+        new PCharacter('Guerreador', {"atk": 3, "con": 2, "int": 1}),
+        new PCharacter('Magro', {"atk": 1, "con": 2, "int": 3}),
+    ];
 
 function debugInit(){
 
@@ -18,10 +22,8 @@ function debugInit(){
 
     window.team.forEach(character => {
     character.effects = [
-            // efeitos ativos
             { name: 'Buff de Ataque', icon: '⚔️', duration: 3 },
             { name: 'Envenenado', icon: '☠️', duration: 2 },
-            // efeito inativo(nao aparece)
             { name: 'Escudo', icon: '🛡️', duration: 0 } 
         ];
     updateSquad(character);
@@ -35,15 +37,16 @@ function debugInit(){
     ];
 
     window.enemyTeam.forEach(enemy => {
-        UpdateEnemySquad(enemy); 
+        enemy.effects = [
+                { name: 'Buff de Ataque', icon: '⚔️', duration: 0 },
+                { name: 'Envenenado', icon: '☠️', duration: 0 },
+                { name: 'Escudo', icon: '🛡️', duration: 2 } 
+            ];
+        updateEnemySquad(enemy);
     });
 };
 
 //DEBUG
-console.log(window.team);
-console.log(window.enemyTeam);
-
-
 
 PLAYER_MANAGER.addGold(100);
 roundNumber.textContent = GAME_MANAGER.getRound();

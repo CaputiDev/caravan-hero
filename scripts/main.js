@@ -12,11 +12,9 @@ if(firstCharData != null){
     let attributes = firstCharData.attributes
     
     const firstChar = new PCharacter(firstCharData.name, attributes);
-    firstChar.effects = []; 
-    team.push(firstChar);
+    addCharToSquad(firstChar);
     console.log(firstChar);
     
-    updateSquad(firstChar);
     
 } else {
 //caso o acesso seja feito sem a criação de um personagem(MODO DEBUG para testes de desenvolvimento)

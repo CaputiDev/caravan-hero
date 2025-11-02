@@ -1,56 +1,55 @@
 
 //draws (desenha os estados atuais na tela)
+
 function refreshAllUI() {
-    team.forEach(character => {
+    window.team.forEach(character => {
         updateSquad(character);
     });
     
-    /*enemyTeam.forEach(enemy =>{
+    window.enemyTeam.forEach(enemy =>{
         updateEnemySquad(enemy);
-    })*/
+    })
 }
+function refreshRoster() {
+    teamRoster.innerHTML = '';
 
-function drawRoster(character) {
-    if(!team.includes(character)){
-        console.warn('Tentativa de adcionar personagem inexistente');
-        return;
-    }
-    
-    // verifica se o slot existe
-    const existingSlot = teamRoster.querySelector(`.team-member-portrait[data-id="${character.id}"]`);
-    
-    const newPortraitHTML = `
-        <div class="portrait-image"></div>
-        <div class="portrait-info">
-            <span class="portrait-name">${character.name}</span>
-            <div class="portrait-stats">
-                <span class="portrait-atk">⚔️ ${character.currentStats.damage}</span>
-                <span class="portrait-hp">❤️ ${character.currentStats.hp}/${character.stats.hp}</span>
-                <span class="portrait-mana">🌀 ${character.currentStats.mana}/${character.stats.mana}</span>
+    window.team.forEach(character => {
+        const newPortraitHTML = `
+            <div class="portrait-image"></div>
+            <div class="portrait-info">
+                <span class="portrait-name">${character.name}</span>
+                <div class="portrait-stats">
+                    <span class="portrait-atk">⚔️ ${character.currentStats.damage}</span>
+                    <span class="portrait-hp">❤️ ${character.currentStats.hp}/${character.stats.hp}</span>
+                    <span class="portrait-mana">🌀 ${character.currentStats.mana}/${character.stats.mana}</span>
+                </div>
             </div>
-        </div>
-    `;
+        `;
+        
+        const slot = document.createElement('div');
+        slot.classList.add('team-member-portrait'); 
+        slot.dataset.id = character.id; 
+        slot.innerHTML = newPortraitHTML; 
+        
+        teamRoster.appendChild(slot);
+    });
 
-    if (existingSlot) {
-        // update
-        existingSlot.innerHTML = newPortraitHTML;
-    } else {
-        // add
-        const firstEmptySlot = teamRoster.querySelector('.empty-slot');
-        if (firstEmptySlot) {
-            firstEmptySlot.innerHTML = newPortraitHTML;
-            firstEmptySlot.classList.remove('empty-slot');
-            firstEmptySlot.dataset.id = character.id;
-        } else {
-            console.error(`Erro: Não foi possível adicionar ${character.name} ao roster.`);
-        }
+    const emptySlotsToDraw = MAX_TEAM_SIZE - window.team.length;
+    for (let i = 0; i < emptySlotsToDraw; i++) {
+        const slot = document.createElement('div');
+        slot.classList.add('team-member-portrait', 'empty-slot');
+        slot.setAttribute('disabled', '');
+        teamRoster.appendChild(slot);
     }
 
-    teamPanelTitle.textContent = `Esquadrão (${MAX_TEAM_SIZE}/6)`
+    teamPanelTitle.textContent = `Esquadrão (${window.team.length}/${MAX_TEAM_SIZE})`;
+}
+function drawRoster(character) {
+    refreshRoster();
 }
 
 function drawCrew(character) {
-    if(!team.includes(character)){
+    if(!window.team.includes(character)){
         console.warn('Tentativa de adcionar personagem inexistente');
         
         return;
@@ -116,28 +115,16 @@ function drawCrew(character) {
     }
 }
 
-function addCharToSquad(character) {
-    if(team.includes(character)){
-        console.warn(`Já existe no time! Não há necessidade de adicionar ${character.name}.`);
-        return;
-    }
-    if (team.length >= 6) {
-        console.warn(`Time cheio! Não foi possível adicionar ${character.name}.`);
-        return;
-    }
-    team.push(character);
-    
-    // Chama as funções de desenho
-    updateSquad(character);
-}
-
 function updateSquad(character){
     drawCrew(character);
     drawRoster(character);
     }
 
+
+//enemy draws
 function drawEnemy(enemy) {
-    if(!enemyTeam.includes(enemy)){
+    if(!window.enemyTeam.includes(enemy)){
+        
         console.warn('Tentativa de desenhar inimigo inexistente');
         return;
     }
@@ -156,10 +143,26 @@ function drawEnemy(enemy) {
     const existingCard = enemyArea.querySelector(`.enemy-card[data-id="${enemy.id}"]`);
 
     const newInnerCardHTML = `
-        <div class="enemy-name">${enemy.name}</div>
-        <div class="enemy-sprite"></div>
-        <div class="hp-bar">
-            <div class="hp-bar-current" style="width: ${(enemy.currentStats.hp / enemy.stats.hp) * 100}%"></div>
+        <div class="player-name">${enemy.name}</div>
+        <div class="player-sprite"></div>
+        <div class="player-lvl">Lvl ${enemy.lvl}</div>
+        <div class="player-stats-area">
+            <div class="player-atk">
+                ATK: ${enemy.currentStats.damage}
+            </div>
+            <div class="stat-bar-container hp-bar">
+                <div class="bar-text hp-text">
+                    ${enemy.currentStats.hp} / ${enemy.stats.hp}
+                </div>
+                <div class="armor-text">
+                    ${enemy.stats.armor}
+                </div>
+                <div class="hp-bar-fill" style="width: ${(enemy.currentStats.hp / enemy.stats.hp) * 100}%"></div>
+            </div>
+            
+            <div class="player-effects">
+                ${effectsHTML}
+            </div>
         </div>
     `;
 
@@ -176,6 +179,6 @@ function drawEnemy(enemy) {
     }
 }
 
-function UpdateEnemySquad(enemy){
+function updateEnemySquad(enemy){
     drawEnemy(enemy);
 }
