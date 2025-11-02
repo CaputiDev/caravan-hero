@@ -27,7 +27,7 @@ function executeRound() {
     //
 
     // sistema de round
-    roundNumberSpan.textContent = GAME_MANAGER.passRound();
+    roundNumber.textContent = GAME_MANAGER.passRound();
     
     // Limpa as ações para o próximo round
     playerActions = {};
