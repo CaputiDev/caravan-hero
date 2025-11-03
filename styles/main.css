@@ -1,5 +1,5 @@
 /* =================================
-   Configurações Globais e Layout
+    Configurações Globais e Layout
 ==================================== */
 :root {
     --bg-color: #1a1a2e;
@@ -11,6 +11,8 @@
     --mana-color: #3498db;
     --gold-color: #f1c40f;
     --orange-color: #f39c12;
+    --enemy-color: #712f26;
+    --enemy-shadow-color: #464646;
 }
 
 body {
@@ -100,7 +102,7 @@ body {
    Área Central (Batalha)
 ==================================== */
 #battlefield {
-    flex-grow: 1; /* Ocupa o resto da tela */
+    flex-grow: 1; 
     display: flex;
     flex-direction: column;
     padding: 20px;
@@ -147,8 +149,8 @@ body {
 
 .enemy-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 0 15px var(--hp-color);
-    border-color: var(--hp-color);
+    box-shadow: 0 0 15px var(--enemy-color);
+    border-color: var(--enemy-shadow-color);
 }
 
 .enemy-name {
@@ -591,11 +593,11 @@ body.shop-is-open #player-gold-display {
 
 #start-battle-btn:hover:not(:disabled) {
     background-color: #ff6b5a;
-    transform: scale(1.02); /* Removemos o translateX */
+    transform: scale(1.02);
 }
 
 #start-battle-btn:active:not(:disabled) {
-    transform: scale(0.98); /* Removemos o translateX */
+    transform: scale(0.98); 
 }
 
 #start-battle-btn:disabled {
@@ -607,17 +609,74 @@ body.shop-is-open #player-gold-display {
     position: absolute;
     top: 20px;
     right: 20px;
-    z-index: 50; /* O mesmo z-index que o ouro tinha */
+    z-index: 50; 
     
-    display: flex; /* Alinha os itens lado a lado */
-    align-items: center; /* Alinha verticalmente */
-    gap: 15px; /* Espaço entre o botão e o ouro */
+    display: flex; 
+    align-items: center; 
+    gap: 15px; 
     
-    /* A animação de slide agora está neste container! */
     transition: right 0.5s ease-in-out;
 }
 
-/* A regra de animação agora se aplica ao container */
 body.shop-is-open #top-right-ui {
     right: 320px; 
+}
+body.targeting-active {
+    cursor: not-allowed !important;
+}
+
+/* O cursor VIRA a mira quando está sobre um inimigo */
+body.targeting-active .enemy-card {
+    cursor: crosshair !important; 
+}
+
+body.targeting-active .enemy-card:hover {
+    box-shadow: 0 0 25px var(--hp-color); 
+    border-color: var(--hp-color);
+    transform: translateY(-5px) scale(1.05);
+}
+
+body.targeting-active .player-card {
+    opacity: 0.7;
+    transition: opacity 0.2s, box-shadow 0.2s;
+}
+
+body.targeting-active .player-card.is-targeting {
+    opacity: 1;
+    box-shadow: 0 0 15px var(--gold-color);
+    border-color: var(--gold-color);
+}
+/* POPUP de acao*/
+#battle-message-popup {
+    position: absolute; 
+    z-index: 1000; 
+    
+    left: 300px; 
+    
+    top: -100px; 
+    opacity: 0;
+    
+    background-color: var(--enemy-shadow-color); 
+    color: var(--gold-color); 
+    padding: 15px 25px;
+    border: 2px solid var(--border-color);
+    border-top: none; 
+    border-radius: 0 0 10px 10px; 
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+    
+    font-size: 1.1em;
+    font-weight: bold;
+    text-align: center;
+    white-space: nowrap; 
+    
+    transition: top 0.5s ease-out, opacity 0.5s ease-out;
+    
+    pointer-events: none; 
+    
+}
+
+/* O estado "visível" que o JS vai adicionar */
+#battle-message-popup.show {
+    opacity: 1;
+    top: 0;
 }

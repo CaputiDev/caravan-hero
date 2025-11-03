@@ -1,6 +1,7 @@
-//DEBUG
-const inimgo = new Enemy('enemy',{atk: 2,con: 3,int:1});
+//popup para cancelar acao
+const battleMessagePopup = document.getElementById('battle-message-popup');
 
+//botao comecar batalha
 const startBattleButton = document.getElementById('start-battle-btn')
 
 //num das rodadas e das fases atuais
@@ -50,10 +51,16 @@ for (let i = 0; i < MAX_TEAM_SIZE; i++) {
 startBattleButton.addEventListener('click', executeRound);
 
 playerArea.addEventListener('click', (event) => {
+
+    // Se estamos em modo de mira, clicar na área do jogador CANCELA a mira.
+    if (BATTLE_MANAGER.isCurrentlyTargeting()) {
+        console.log("[Main] Mira cancelada (clique na área do time)");
+        BATTLE_MANAGER.resetTargeting(true); // Chama o método do gerenciador
+        return;
+    }
+    
     // Verifica se o clique foi em um ícone de ação
     const clickedIcon = event.target.closest('.action-icon');
-    
-    // Se não foi, ou se a batalha estiver em andamento, ignora
     if (!clickedIcon) return; 
 
     // Pega o card e o ID do personagem
@@ -61,19 +68,30 @@ playerArea.addEventListener('click', (event) => {
     const characterId = card.dataset.id;
     const actionType = clickedIcon.dataset.actionType;
 
-    // Armazena a ação escolhida no "Estado"
-    playerActions[characterId] = actionType;
-
     // Atualiza a UI (remove 'selected' de todos, adiciona no clicado)
     card.querySelectorAll('.action-icon').forEach(icon => {
         icon.classList.remove('selected');
     });
-    clickedIcon.classList.add('selected');
+
+    delete window.playerActions[characterId];
+
+    if (actionType === 'rest') {
+        // descanso
+        const character = window.team.find(char => char.id == characterId);
+        const charName = character ? character.name : `ID ${characterId}`;
+
+        console.log(`[DEBUG]: Personagem ${characterId}:${charName} escolheu Descansar`);
+        window.playerActions[characterId] = { type: 'rest' };
+        clickedIcon.classList.add('selected');
+        checkBattleReady();
+    } else {
+        // melee ou skill
+        BATTLE_MANAGER.startTargeting(characterId, card, actionType);
+    }
     
     // (Lógica futura: se clicar em "Habilidades" 📜,
     //  você abriria um modal de skills aqui)
 
-    // 3. Verifica se a batalha está pronta para começar
     checkBattleReady();
 });
 // Abrir o Painel de Recrutamento
@@ -100,6 +118,18 @@ closeButtons.forEach(button => {
     });
 });
 
+enemyArea.addEventListener('click', (event) => {
+    // Só funciona se o gerenciador estiver no modo de mira
+    if (!BATTLE_MANAGER.isCurrentlyTargeting()) return;
+
+    const enemyCard = event.target.closest('.enemy-card');
+    
+    if (enemyCard) {
+        const enemyId = enemyCard.dataset.id;
+        const enemyName = enemyCard.dataset.name;
+        BATTLE_MANAGER.confirmTarget(enemyId);
+    }
+});
 // Interatividade do Tooltip do Inimigo
 enemyArea.addEventListener('mouseover', (event) => {
     const enemyCard = event.target.closest('.enemy-card');
@@ -142,4 +172,11 @@ enemyArea.addEventListener('mousemove', (event) => {
 });
 
 
-
+document.getElementById('battlefield').addEventListener('click', (event) => {
+    if (!BATTLE_MANAGER.isCurrentlyTargeting()) return;
+    
+    if (!event.target.closest('.enemy-card') && !event.target.closest('.player-card')) {
+        console.log("[Main] Mira cancelada (clique no fundo)");
+        BATTLE_MANAGER.resetTargeting(true); 
+    }
+});
