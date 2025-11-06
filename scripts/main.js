@@ -6,12 +6,22 @@ window.playerActions = {};
 //importação do personagem
 let firstCharData = localStorage.getItem('FirstCharData');
 if(firstCharData != null){
+firstCharData = JSON.parse(firstCharData);
+    //debug
     localStorage.setItem(ID_COUNTER_KEY,1);
-
-    firstCharData = JSON.parse(firstCharData);
     let attributes = firstCharData.attributes
     
-    const firstChar = new PCharacter(firstCharData.name, attributes);
+    // 2. [A CORREÇÃO] Crie o array na ordem correta
+    const attributesArray = [
+        attributes.str,
+        attributes.con,
+        attributes.agi,
+        attributes.int,
+        attributes.wis
+    ];
+    
+    const firstChar = new PCharacter(firstCharData.name, attributesArray);
+    
     addCharToSquad(firstChar);
     console.log(firstChar);
     

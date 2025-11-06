@@ -1,51 +1,50 @@
-    //distribuicao de atributos 
-    const MAX_POINTS = 3;
-    const MAX_PER_STAT = 3;
-    const MIN_PER_STAT = 1;
+const VOCATIONS = {
+    default: {
+        name: "Aventureiro",
+        desc: "Equilibrado. Consegue fazer de tudo um pouco."
+    },
+    str: {
+        name: "Porradeiro",
+        desc: "Causa dano físico massivo."
+    },
+    con: {
+        name: "Tanque",
+        desc: "Resiste a grandes quantidades de dano."
+    },
+    agi: {
+        name: "Assassino",
+        desc: "Ataca primeiro e desvia de golpes."
+    },
+    int: {
+        name: "Especialista",
+        desc: "Utiliza magias e habilidades poderosas."
+    },
+    wis: {
+        name: "Sábio",
+        desc: "Resiste a magias e regenera mana."
+    }
+};
 
-    let totalPoints = MAX_POINTS;
-    const stats = {
-        atk: 1,
-        con: 1,
-        int: 1
-    };
+const MAX_POINTS = 5;
+const MAX_PER_STAT = 5;
+const MIN_PER_STAT = 1;
+let totalPoints = MAX_POINTS;
 
-    const valueElements = {
-        atk: document.getElementById('ataque-value'),
-        con: document.getElementById('constituicao-value'),
-        int: document.getElementById('inteligencia-value')
-    };
-    plusButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            const statName = button.dataset.stat;
-            if (totalPoints > 0 && stats[statName] < MAX_PER_STAT) {
-                stats[statName]++;
-                totalPoints--;
-                updateUI();
-            }
-        });
-    });
+const stats = {
+    str: 1,
+    con: 1,
+    agi: 1,
+    int: 1,
+    wis: 1
+};
 
-    minusButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            const statName = button.dataset.stat;
-            if (stats[statName] > MIN_PER_STAT) {
-                stats[statName]--;
-                totalPoints++;
-                updateUI();
-            }
-        });
-    });
+const valueElements = {
+    str: document.getElementById('str-value'),
+    con: document.getElementById('con-value'),
+    agi: document.getElementById('agi-value'),
+    int: document.getElementById('int-value'),
+    wis: document.getElementById('wis-value')
+};
 
-    charNameInput.addEventListener('input', updateUI);
 
-    startButton.addEventListener('click', () => {
-        
-        let firstChar = new PCharacter(charNameInput.value, stats);
-        const firstCharFormatted = JSON.stringify(firstChar);
-
-        localStorage.setItem('FirstCharData',firstCharFormatted);
-        
-        window.location.href = './pages/main.html';
-    });
-    updateUI();
+updateUI();

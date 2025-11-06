@@ -4,20 +4,57 @@ class PCharacter extends Character {
         super(name, attributes, lvl, tier); 
 
         this.experience = 0;
-        this.experienceGap = 100 * lvl;
         this.inventory = [];
+        this.skills = [];
+
+        this.experienceGap = this.lvl * 100;
     }
 
+    gainExperience(amount) {
+        if (this.lvl >= 10) return; // Nível máximo
+
+        this.experience += amount;
+        console.log(`${this.name} ganhou ${amount} de EXP! (${this.experience}/${this.experienceGap})`);
+
+        // Verifica se upou
+        if (this.experience >= this.experienceGap) {
+            this.levelUp();
+        }
+    }
     levelUp() {
-        if(this.lvl<=10){
-            this.lvl += 1;
-            this.experienceGap = this.lvl * 100;
-            this.experience = 0;
-            this.recalculateAll();
-            return this.lvl;
-        }else{
+        if (this.lvl >= 10) { // Nível máximo
             return false;
         }
+
+        // Salva os stats máximos antigos para calcular o ganho
+        const oldMaxHP = this.stats.hp;
+        const oldMaxMana = this.stats.mana;
+        
+        // 1. Sobe o nível e reseta a experiência (Sua lógica)
+        this.lvl += 1;
+        this.experience = 0; // (Ou this.experience -= this.experienceGap para manter o excesso)
+        this.experienceGap = this.lvl * 100;
+        
+        // 2. Recalcula os stats base (this.stats)
+        this.recalculateAll();
+        
+        // 3. [ATUALIZAÇÃO] Adiciona o HP/Mana ganho ao HP/Mana atual
+        const hpGained = this.stats.hp - oldMaxHP;
+        const manaGained = this.stats.mana - oldMaxMana;
+        
+        this.currentStats.hp += hpGained;
+        this.currentStats.mana += manaGained;
+        
+        // 4. Garante que o HP/Mana atual não ultrapasse o novo máximo
+        if (this.currentStats.hp > this.stats.hp) {
+            this.currentStats.hp = this.stats.hp;
+        }
+        if (this.currentStats.mana > this.stats.mana) {
+            this.currentStats.mana = this.stats.mana;
+        }
+
+        console.log(`%c${this.name} subiu para o NÍVEL ${this.lvl}!`, "color: yellow; font-weight: bold;");
+        return this.lvl;
     }
 
 }

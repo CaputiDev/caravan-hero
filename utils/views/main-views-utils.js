@@ -19,9 +19,9 @@ function refreshRoster() {
             <div class="portrait-info">
                 <span class="portrait-name">${character.name}</span>
                 <div class="portrait-stats">
-                    <span class="portrait-atk">⚔️ ${character.currentStats.damage}</span>
-                    <span class="portrait-hp">❤️ ${character.currentStats.hp}/${character.stats.hp}</span>
-                    <span class="portrait-mana">🌀 ${character.currentStats.mana}/${character.stats.mana}</span>
+                    <span class="portrait-atk">⚔️ ${character.stats.damage}</span>
+                    <span class="portrait-hp">❤️ ${character.currentHP}/${character.stats.hp}</span>
+                    <span class="portrait-mana">🌀 ${character.currentMana}/${character.stats.mana}</span>
                 </div>
             </div>
         `;
@@ -80,22 +80,22 @@ function drawCrew(character) {
         <div class="player-lvl">Lvl ${character.lvl}</div>
         <div class="player-stats-area">
             <div class="player-atk">
-                ATK: ${character.currentStats.damage}
+                ATK: ${character.stats.damage}
             </div>
             <div class="stat-bar-container hp-bar">
                 <div class="bar-text hp-text">
-                    ${character.currentStats.hp} / ${character.stats.hp}
+                    ${character.currentHP} / ${character.stats.hp}
                 </div>
                 <div class="armor-text">
                     ${character.stats.armor}
                 </div>
-                <div class="hp-bar-fill" style="width: ${(character.currentStats.hp / character.stats.hp) * 100}%"></div>
+                <div class="hp-bar-fill" style="width: ${(character.currentHP / character.stats.hp) * 100}%"></div>
             </div>
             <div class="stat-bar-container mana-bar">
                 <div class="bar-text mana-text">
-                    ${character.currentStats.mana} / ${character.stats.mana}
+                    ${character.currentMana} / ${character.stats.mana}
                 </div>
-                <div class="mana-bar-fill" style="width: ${(character.currentStats.mana / character.stats.mana) * 100}%"></div>
+                <div class="mana-bar-fill" style="width: ${(character.currentMana / character.stats.mana) * 100}%"></div>
             </div>
             <div class="player-effects">
                 ${effectsHTML}
@@ -148,16 +148,16 @@ function drawEnemy(enemy) {
         <div class="player-lvl">Lvl ${enemy.lvl}</div>
         <div class="player-stats-area">
             <div class="player-atk">
-                ATK: ${enemy.currentStats.damage}
+                ATK: ${enemy.stats.damage}
             </div>
             <div class="stat-bar-container hp-bar">
                 <div class="bar-text hp-text">
-                    ${enemy.currentStats.hp} / ${enemy.stats.hp}
+                    ${enemy.currentHP} / ${enemy.stats.hp}
                 </div>
                 <div class="armor-text">
                     ${enemy.stats.armor}
                 </div>
-                <div class="hp-bar-fill" style="width: ${(enemy.currentStats.hp / enemy.stats.hp) * 100}%"></div>
+                <div class="hp-bar-fill" style="width: ${(enemy.currentHP / enemy.stats.hp) * 100}%"></div>
             </div>
             
             <div class="player-effects">

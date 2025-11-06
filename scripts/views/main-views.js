@@ -240,8 +240,8 @@ enemyArea.addEventListener('mouseover', (event) => {
         if (enemy) {
             document.getElementById('tooltip-name').textContent = enemy.name;
             document.getElementById('tooltip-desc').textContent = enemy.description; 
-            document.getElementById('tooltip-hp').textContent = `${enemy.currentStats.hp}/${enemy.stats.hp}`;
-            document.getElementById('tooltip-atk').textContent = enemy.currentStats.damage;
+            document.getElementById('tooltip-hp').textContent = `${enemy.currentHP}/${enemy.stats.hp}`;
+            document.getElementById('tooltip-atk').textContent = enemy.stats.damage;
             
             // Posiciona e mostra o tooltip
             enemyTooltip.classList.remove('hidden');
