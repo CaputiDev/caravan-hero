@@ -14,10 +14,25 @@ function checkBattleReady() {
 }
 
 function executeRound() {
-    let combatOrder = [];
+    let combatOrder = calculateCombatOrder();
+
+    console.log("--- Ordem de Combate ---");
+    combatOrder.forEach((char, index) => {
+        console.log(`${index + 1}. ${char.name} (Iniciativa: ${char.stats.initiative})`);
+    });
 
     if (startBattleButton.disabled) return;
 
+    for (const character of combatOrder) {
+        // Verifica se é um PCharacter (do time) ou um Enemy
+        if (character instanceof PCharacter) {
+            // Processa a ação do jogador (que está em window.playerActions)
+            // ex: processPlayerAction(character, window.playerActions[character.id]);
+        } else if (character instanceof Enemy){
+            // Processa a ação da IA do inimigo
+            // ex: processEnemyAI(character);
+        }
+    }
     console.log("Batalha Iniciada! Ações:", playerActions);
     
     roundNumber.textContent = GAME_MANAGER.passRound();
@@ -100,4 +115,16 @@ function removeEnemyFromSquad(enemy) {
     if (enemyCard) {
         enemyCard.remove();
     }
+}
+
+//funcoes auxiliares
+function calculateCombatOrder() {
+    const allCombatants = [...window.team, ...window.enemyTeam];
+
+    allCombatants.sort((a, b) => {
+        return b.stats.initiative - a.stats.initiative;
+    });
+
+    return allCombatants;
+    
 }
