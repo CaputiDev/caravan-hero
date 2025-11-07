@@ -54,7 +54,7 @@ class Character {
         this.modifiers = {
             // Força
             "damage": 2 + this.lvl,
-            "critical_damage": 1 + this.lvl,
+            "critical_multiplier": 1 + this.lvl,
             // Agilidade
             "initiative" : 1 + this.lvl,
             "evasion": 0.5 + (this.lvl * 0.5),
@@ -68,12 +68,13 @@ class Character {
             // Sabedoria
             "magic_resist": 1 + this.lvl,
             "mana_regen": 1 + (this.lvl),
+            "hp_regen": 2 + (this.lvl)
         };
 
         this.stats = {
             // FOR
             "damage": this._calculateStat("damage", "str"),
-            "critical_damage": this.attributes.str * this.modifiers.critical_damage * this.tier,
+            "critical_multiplier": Math.floor((this.attributes.str + this.modifiers.critical_multiplier) /2) * this.tier,
             
             // AGI
             "initiative": this._calculateStat("initiative", "agi"),
@@ -91,7 +92,7 @@ class Character {
             // SAB
             "magic_resist": this._calculateStat("magic_resist", "wis"),
             "mana_regen": this._calculateStat("mana_regen", "wis"),
-            "debuff_resist": this._calculateStat("debuff_resist", "wis"),
+            "hp_regen": this._calculateStat("hp_regen", "wis"),
         };
     }
     getAttributes(){
@@ -127,7 +128,7 @@ class Character {
         if (Math.random() * 100 < this.stats.critical_chance) {
             isCritical = true;
             
-            damage = this.stats.critical_damage; 
+            damage = this.stats.damage * this.stats.critical_multiplier; 
         }
 
         // reducao de dano pela armadura

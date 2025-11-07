@@ -1,32 +1,33 @@
 /* --- Variáveis CSS para cores e tamanhos (boas práticas) --- */
 :root {
-    --primary-bg-color: rgba(18, 24, 37, 0.9); /* Fundo da caixa central */
-    --border-color: #007bff; /* Borda da caixa central */
-    --shadow-color: rgba(0, 123, 255, 0.5); /* Sombra da caixa central */
+    --primary-bg-color: rgba(18, 24, 37, 0.9);
+    --border-color: #007bff; 
+    --shadow-color: rgba(0, 123, 255, 0.5); 
     --light-text-color: #eee;
     --dark-text-color: #333;
-    --success-color: #4CAF50; /* Verde para botões de sucesso */
+    --success-color: #4CAF50; 
     --success-hover-color: #45a049;
-    --secondary-btn-color: #666; /* Cinza para botões secundários */
+    --secondary-btn-color: #666; 
     --secondary-btn-hover-color: #777;
-    --gold-color: #ffd700; /* Cor para vocação */
-    --max-width-box: 600px; /* Largura máxima da caixa central */
-    --min-width-box: 320px;
+    --gold-color: #ffd700; 
+    --max-width-box-open: 1000px; 
+    --max-width-box-closed: 550px;
 }
 
 body {
     margin: 0;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #222222ab; /* Seu background-color com transparência */
+    background-color: #222222ab;
     color: var(--light-text-color);
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    overflow-y: auto; /* Permite scroll se o conteúdo for muito grande */
+    
+    overflow-y: auto; 
     position: relative;
-    padding: 20px 0; /* Adiciona um pequeno padding vertical para não grudar nas bordas */
-    box-sizing: border-box; /* Garante que padding não cause overflow */
+    padding: 20px 0;
+    box-sizing: border-box;
 }
 
 /* animacao */
@@ -154,18 +155,20 @@ body {
     border: 3px solid var(--border-color);
     border-radius: 15px;
     padding: 30px;
-    width: 90%; /* Usa mais da largura em telas menores */
-    max-width: var(--max-width-box); /* Limite a largura máxima */
+    width: 90%;
+    max-width: var(--max-width-box); 
     min-width: var(--min-width-box);
+
     box-shadow: 0 0 20px var(--shadow-color);
     text-align: center;
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 15px;
-    box-sizing: border-box; /* Garante que padding não cause overflow */
+    box-sizing: border-box;
+    justify-content: flex-start; 
+    position: relative;
 }
-
 .box-title {
     font-size: 2em;
     color: #fff;
@@ -362,35 +365,112 @@ body {
     display: block;
 }
 
-@media (max-width: 550px) {
-    #central-box {
-        width: 95%; /* Ocupa ainda mais espaço em telas muito pequenas */
-        padding: 20px;
-    }
-    .box-title {
-        font-size: 1.8em;
-    }
-    #char-name-input,
-    .navigation-buttons button {
-        font-size: 1em;
-        padding: 10px 15px;
-    }
-    .char-stats .title {
-        font-size: 1em;
-    }
-    .stat-controls .value {
-        font-size: 1.2em;
-    }
-    .stat-btn {
-        width: 30px;
-        height: 30px;
-        font-size: 1.3em;
-    }
-    #vocation-display {
-        font-size: 1em;
-    }
-    #vocation-tooltip {
-        width: 90vw; /* Ajusta a largura para a tela */
-        font-size: 0.85em;
-    }
+#step-2-content-wrapper {
+    display: flex;
+    flex-direction: row; 
+    width: 100%;
+    gap: 20px;
+}
+
+#preview-panel,
+#allocation-panel {
+    flex: 1; 
+    padding: 15px;
+    background-color: rgba(112, 106, 106, 0.2);
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+}
+
+#char-stats-list {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.panel-subtitle {
+    font-size: 1.3em;
+    font-weight: bold;
+    color: var(--gold-color);
+    margin-top: 0;
+    margin-bottom: 20px;
+    border-bottom: 2px solid var(--border-color);
+    padding-bottom: 10px;
+}
+
+#preview-stats-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px 15px; 
+    text-align: left;
+
+    grid-auto-rows: 50px; 
+}
+
+.preview-stat {
+    display: flex;
+    justify-content: space-between; 
+    align-items: center;
+    font-size: 0.95em;
+    padding: 6px 8px;
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+    transition: background-color 0.2s, color 0.2s;
+    position: relative;
+
+    box-sizing: border-box; 
+    
+}
+
+#prev-stat-initiative,
+#prev-stat-hp,
+#prev-stat-mana,
+#prev-stat-magic_resist {
+    margin-top: 10px;
+}
+
+.preview-stat span:first-child {
+    color: #ccc;
+    padding-right: 10px;
+    text-align: left;
+}
+.preview-stat span:last-child {
+    color: var(--light-text-color);
+    font-weight: bold;
+    
+    flex-shrink: 0; 
+    padding-left: 15px; 
+}
+.stat-tooltip {
+    display: none;
+    position: absolute;
+    bottom: 110%; 
+    left: 50%;
+    transform: translateX(-50%);
+    width: 200px;
+    
+    background-color: #111;
+    border: 1px solid var(--gold-color);
+    border-radius: 5px;
+    padding: 8px;
+    font-size: 0.9em;
+    text-align: left;
+    color: var(--light-text-color);
+    z-index: 10;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.5);
+    
+    white-space: normal; 
+}
+
+
+.preview-stat:hover .stat-tooltip {
+    display: block;
+}
+
+.preview-stat.stat-highlight {
+    background-color: var(--gold-color);
+    z-index: 2;
+}
+.preview-stat.stat-highlight span {
+    color: var(--dark-text-color);
 }
