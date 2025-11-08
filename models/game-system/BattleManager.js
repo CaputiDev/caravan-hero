@@ -18,7 +18,6 @@ BattleManager.prototype.processActions = async function(){
         }
 
         await wait(turnDelay);
-        refreshAllUI();
     }
     endRound();
 }
@@ -26,12 +25,9 @@ BattleManager.prototype.processActions = async function(){
 BattleManager.prototype.processAllyActions = function(character){
     const actions = window.playerActions;
     const charActions = actions[character.id];
-    
-    if(!charActions) return;
 
-    if (charActions.type === 'rest') {        
-        //logica de descanso
-        return; 
+    if (!charActions || charActions.type === 'rest') {        
+        character.rest();
     }
     else if(charActions.type === 'melee'){
 

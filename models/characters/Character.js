@@ -147,7 +147,15 @@ class Character {
         } else {
             console.log(`${this.name} ataca ${target.name} causando ${finalDamage} de dano.`);
         }
+        
         refreshAllUI();
         return finalDamage;
+    }
+    rest(){
+        //rec. de hp
+        if(this.stats.hp_regen < (this.stats.hp - this.currentHP)) this.currentHP += this.stats.hp_regen; else this.currentHP = this.stats.hp;
+        //rec de mana
+        if(this.stats.mana_regen < (this.stats.mana - this.currentMana)) this.currentMana += this.stats.mana_regen; else this.currentMana = this.stats.mana;
+        
     }
 }
