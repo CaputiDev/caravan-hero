@@ -13,9 +13,7 @@ BattleManager.prototype.processActions = function(){
 }
 
 BattleManager.prototype.processAllyActions = function(character){
-    if(){
-        
-    }
+    
 }
 
 BATTLE_MANAGER = new BattleManager();
