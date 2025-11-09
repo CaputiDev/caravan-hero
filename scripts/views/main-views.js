@@ -166,7 +166,7 @@ skillPopup.addEventListener('click', (event) => {
     
     if (selectedSkillItem && !selectedSkillItem.classList.contains('disabled')) {
         
-        const skillId = selectedSkillItem.dataset.skillId;
+        const skillId = parseInt(selectedSkillItem.dataset.skillId,10);
         const characterId = skillPopup.dataset.characterId;
         const card = playerArea.querySelector(`.player-card[data-id="${characterId}"]`);
         
@@ -175,6 +175,7 @@ skillPopup.addEventListener('click', (event) => {
         const skill = character.skills.find(s => s.id === skillId);
         
         if (!character || !skill || !card) {
+            
             console.error("Erro ao selecionar a skill. Dados não encontrados.");
             return;
         }

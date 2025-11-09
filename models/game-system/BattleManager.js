@@ -33,11 +33,24 @@ BattleManager.prototype.processAllyActions = function(character){
 
         const targetId = Number.parseInt(charActions.targetId);
         const target = window.combatOrder.find(enemy => enemy.id == targetId);
+        if (!target) return;
 
         if(target)character.meleeAttack(target);
 
-    }else if(charActions.type === 'skill'){
-        //logica skill
+    }
+    else if(charActions.type === 'skill'){
+        const targetId = Number.parseInt(charActions.targetId);
+        const target = window.combatOrder.find(c => c.id == targetId);
+        if (!target) return;
+
+        const skillId = charActions.skillId;
+        const skillToUse = character.skills.find(s => s.id == skillId);
+
+        if (skillToUse) {
+            skillToUse.useSkill(character, target);
+        } else {
+            console.error(`[BATTLE-MANAGER] Erro: Personagem não tem habilidade com SkillId: ${skillId}`);
+        }
     }
     
 }

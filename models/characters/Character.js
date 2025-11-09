@@ -1,7 +1,7 @@
-const ID_COUNTER_KEY = 'gameCharacterIdCounter';
+const ID_COUNTER_KEY_CHARACTER = 'gameCharacterIdCounter';
 
 function getNextCharacterId() {
-    let nextId = localStorage.getItem(ID_COUNTER_KEY);
+    let nextId = localStorage.getItem(ID_COUNTER_KEY_CHARACTER);
 
     if (nextId === null) {
         nextId = 1;
@@ -9,7 +9,7 @@ function getNextCharacterId() {
         nextId = parseInt(nextId, 10);
     }
     
-    localStorage.setItem(ID_COUNTER_KEY, (nextId + 1).toString());
+    localStorage.setItem(ID_COUNTER_KEY_CHARACTER, (nextId + 1).toString());
 
     return nextId;
 }
@@ -34,6 +34,7 @@ class Character {
         this.modifiers = null; 
         this.stats = null;
         this.effects = [];
+        this.skills = [];
         
         this.recalculateAll(); 
 

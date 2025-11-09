@@ -1,7 +1,23 @@
+const ID_COUNTER_KEY_EFFECT = 'gameEffectIdCounter';
+
+function getNextEffectId() {
+    let nextId = localStorage.getItem(ID_COUNTER_KEY_EFFECT);
+
+    if (nextId === null) {
+        nextId = 1;
+    } else {
+        nextId = parseInt(nextId, 10);
+    }
+    
+    localStorage.setItem(ID_COUNTER_KEY_EFFECT, (nextId + 1).toString());
+
+    return nextId;
+}
 //funcao construtora
 //classe generica
 function Effect(name, icon, description){
-        
+    
+    this.id = getNextEffectId();
     this.name = name;
     this.icon = icon;
     this.description = description;
@@ -89,5 +105,25 @@ StatBuffEffect.prototype.onRemove = function(target) {
     
     if (target.stats[this.stat] !== undefined) {
         target.stats[this.stat] -= this.amount;
+    }
+}
+
+// Cura com o tempo
+function HealOverTimeEffect(name, icon, description, healPerTick) {
+    Effect.call(this, name, icon, description);
+
+    this.healPerTick = healPerTick;
+}
+
+HealOverTimeEffect.prototype = Object.create(Effect.prototype);
+HealOverTimeEffect.prototype.constructor = HealOverTimeEffect;
+
+HealOverTimeEffect.prototype.onTick = function(target) {
+    console.log(`%c[Efeito] ${target.name} recupera ${this.healPerTick} de HP de ${this.name}!`, "color: #4CAF50;");
+    
+    target.currentHP += this.healPerTick;
+
+    if (target.currentHP > target.stats.hp) {
+        target.currentHP = target.stats.hp;
     }
 }

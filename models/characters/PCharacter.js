@@ -11,8 +11,6 @@ class PCharacter extends Character {
         this.weapon = {};
         this.equipment = {};
 
-        this.skills = [];
-
         this.experienceGap = this.lvl * 100;
 
         //chance do inimigo escolher atacar ele

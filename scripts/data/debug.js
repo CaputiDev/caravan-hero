@@ -5,8 +5,9 @@ window.debugTeam = [
 ];
 
 function debugInit(){
-
-    localStorage.setItem(ID_COUNTER_KEY,1);
+    localStorage.setItem(ID_COUNTER_KEY_SKILL,1);
+    localStorage.setItem(ID_COUNTER_KEY_EFFECT,1);
+    localStorage.setItem(ID_COUNTER_KEY_CHARACTER,1);
     localStorage.removeItem('FirstCharData');
     console.warn(`Falha ao carregar dados. Criando time de DEBUG com 6 membros.`);
 
@@ -18,7 +19,6 @@ function debugInit(){
         new PCharacter('Tanque',    [2, 4, 1, 1, 2]),
         new PCharacter('Arqueiro',  [1, 2, 4, 2, 1])
     ];
-    console.log(`DEBUG: Criação de time padrão para testes de desenvolvimento:`);
 
     window.team.forEach(character => {
 
@@ -27,13 +27,13 @@ function debugInit(){
         //hard coded
         if (character.name === 'Mago') {
             character.skills = [
-                { id: 'fireball', name: 'Bola de Fogo', targetType: 'enemy' },
-                { id: 'ice_shield', name: 'Escudo de Gelo', targetType: 'ally' }
+                SKILLS.FIREBALL,
+                //{ id: 'ice_shield', name: 'Escudo de Gelo', targetType: 'ally' }
             ];
         } else if (character.name === 'Clérigo') {
             character.skills = [
-                { id: 'heal', name: 'Cura Leve', targetType: 'ally' },
-                { id: 'smite', name: 'Golpe Divino', targetType: 'enemy' }
+                //{ id: 'heal', name: 'Cura Leve', targetType: 'ally' },
+                SKILLS.SMITE,
             ];
         }
     });
