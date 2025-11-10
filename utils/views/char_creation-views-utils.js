@@ -22,21 +22,14 @@ minusButtons.forEach(button => {
 });
 
 charNameInput.addEventListener('input', () => {
-
     nextStepButton.disabled = (charNameInput.value.trim() === '');
 });
 
-nextStepButton.addEventListener('click', () => {
-    step1.classList.add('hidden');
-    step2.classList.remove('hidden');
-});
-
 prevStepButton.addEventListener('click', () => {
-    step2.classList.add('hidden');
-    step1.classList.remove('hidden');
+    window.location.href = '../';
 });
 
-startButton.addEventListener('click', () => {
+nextStepButton.addEventListener('click', () => {
     const charName = charNameInput.value;
     
     const attributesArray = [
@@ -52,7 +45,7 @@ startButton.addEventListener('click', () => {
 
     localStorage.setItem('FirstCharData', firstCharFormatted);
     
-    window.location.href = './pages/main.html';
+    window.location.href = './main.html';
 });
 
 function updateUI() {
@@ -77,7 +70,7 @@ function updateUI() {
     updateVocation();
 
     const arePointsSpent = (totalPoints === 0);
-    startButton.disabled = !arePointsSpent;
+    nextStepButton.disabled = !arePointsSpent;
 
     updateStatsPreview();
 }
@@ -98,7 +91,7 @@ function updateVocation() {
         }
     }
 
-    if(totalPoints == 0){
+    if(totalPoints == 0) {
     if (isTied) {
         highestStat = 'default';
     }
