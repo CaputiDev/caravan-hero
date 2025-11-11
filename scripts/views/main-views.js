@@ -32,6 +32,12 @@ for (let i = 0; i < MAX_TEAM_SIZE; i++) {
 
     teamRoster.appendChild(slot);
 }
+//impede bugs visuais ao apertar Tab
+window.addEventListener('keydown', function(e) {
+    if (e.key === 'Tab' || e.keyCode === 9) {
+        e.preventDefault();
+    }
+});
 
 //INTERATIVIDADE DOS MENUS
 
