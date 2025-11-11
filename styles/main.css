@@ -13,6 +13,21 @@
 /* =================================
     Configurações Globais e Layout
 ==================================== */
+* {
+    -webkit-user-drag: none;
+    -moz-user-drag: none;
+    -o-user-drag: none;
+    user-select: none;
+}
+
+::selection {
+    background-color: transparent;
+}
+
+::-moz-selection {
+    background-color: transparent;
+}
+
 :root {
 
     --blue-decals: rgb(12, 120, 192);
@@ -976,3 +991,4 @@ body.targeting-ally .player-card.is-targeting {
     font-size: 1.2em;
     font-style: italic;
 }
+
