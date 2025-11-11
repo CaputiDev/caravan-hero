@@ -98,7 +98,7 @@ class Character {
     getAttributes(){
         return [this.str, this.con, this.agi, this.int, this.wis]
     }
-    // (Suas funções 'showAttributes' e 'showStats' funcionarão perfeitamente)
+    
     showAttributes() {
         console.log(`--- Atributos de ${this.name} ---`);
         Object.keys(this.attributes).forEach(key => {
@@ -141,7 +141,6 @@ class Character {
             target.currentHP = 0;
         }
 
-        
         //DEBUG TEMPORARIO
         if (isCritical) {
             console.log(`%c💥 ATAQUE CRÍTICO! ${this.name} ataca ${target.name} causando ${finalDamage} de dano!`, "color: var(--orange-color); font-weight: bold; font-size: 1.1em;");

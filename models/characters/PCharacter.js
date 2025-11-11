@@ -29,7 +29,7 @@ class PCharacter extends Character {
         }
     }
     levelUp() {
-        if (this.lvl >= 10) { // Nível máximo
+        if (this.lvl >= 10) {
             return false;
         }
 
@@ -37,22 +37,22 @@ class PCharacter extends Character {
         const oldMaxHP = this.stats.hp;
         const oldMaxMana = this.stats.mana;
         
-        // 1. Sobe o nível e reseta a experiência (Sua lógica)
+        // Sobe o nível e reseta a experiência (Sua lógica)
         this.lvl += 1;
         this.experience = 0; // (Ou this.experience -= this.experienceGap para manter o excesso)
         this.experienceGap = this.lvl * 100;
         
-        // 2. Recalcula os stats base (this.stats)
+        // Recalcula os stats base (this.stats)
         this.recalculateAll();
         
-        // 3. [ATUALIZAÇÃO] Adiciona o HP/Mana ganho ao HP/Mana atual
+        //Adiciona o HP/Mana ganho ao HP/Mana atual
         const hpGained = this.stats.hp - oldMaxHP;
         const manaGained = this.stats.mana - oldMaxMana;
         
         this.currentStats.hp += hpGained;
         this.currentStats.mana += manaGained;
         
-        // 4. Garante que o HP/Mana atual não ultrapasse o novo máximo
+        // Garante que o HP/Mana atual não ultrapasse o novo máximo
         if (this.currentStats.hp > this.stats.hp) {
             this.currentStats.hp = this.stats.hp;
         }

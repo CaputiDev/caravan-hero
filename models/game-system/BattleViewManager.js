@@ -18,8 +18,6 @@ BattleViewManager.prototype.startTargeting = function(characterId, characterName
         this.resetTargeting(true);
     }
 
-    console.log(`[BattleViewManager] Personagem ${characterId}: ${characterName} iniciando mira com ${actionType}`);
-
     this.isTargeting = true;
     this.targetingCharacterId = characterId;
     this.targetingActionType = actionType;
@@ -53,8 +51,6 @@ BattleViewManager.prototype.startTargeting = function(characterId, characterName
 
 BattleViewManager.prototype.confirmTarget = function(enemyId) {
     if (!this.isTargeting) return;
-
-    console.log(`[BattleViewManager] Personagem ${this.targetingCharacterId} mirou no personagem ${enemyId}`);
 
     window.playerActions[this.targetingCharacterId] = {
         type: this.targetingActionType,

@@ -48,18 +48,15 @@ playerArea.addEventListener('click', (event) => {
             if (clickedAllyCard) {
                 
                 const allyId = clickedAllyCard.dataset.id;
-                console.log(`[Main] Alvo aliado ${allyId} confirmado.`);
                 
                 
                 BATTLE_VIEW_MANAGER.confirmTarget(allyId); 
             } else {
                 
-                console.log("[Main] Mira cancelada (clique na área do time)");
                 BATTLE_VIEW_MANAGER.resetTargeting(true);
             }
         } else {
             
-            console.log("[Main] Mira cancelada (clique na área do time)");
             BATTLE_VIEW_MANAGER.resetTargeting(true);
         }
         return; 
@@ -94,7 +91,6 @@ playerArea.addEventListener('click', (event) => {
         BATTLE_VIEW_MANAGER.startTargeting(character.id, character.name, card, 'melee', 'enemy');
 
     }else if (actionType === 'rest') {
-        console.log(`[Main] Personagem ${character.name} escolheu Descansar`);
         window.playerActions[characterId] = { type: 'rest' };
         
         clickedIcon.classList.add('action-defined');

@@ -13,8 +13,7 @@ BattleManager.prototype.processActions = async function(){
             BATTLE_MANAGER.processAllyActions(character);
             
             }else if (character instanceof Enemy){
-            // Processa a ação da IA do inimigo
-            // ex: processEnemyAI(character);
+                ENEMY_AI.processEnemyAI(character);
         }
 
         await wait(turnDelay);
