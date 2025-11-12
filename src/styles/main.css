@@ -1011,3 +1011,18 @@ body.targeting-ally .player-card.is-targeting {
     font-style: italic;
     font-size: 1.1em;
 }
+@keyframes fade-out-and-fall {
+    0% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(40px) scale(0.8);
+        opacity: 0;
+    }
+}
+
+.is-dead {
+    animation: fade-out-and-fall 0.5s ease-out forwards;
+    z-index: 1 !important; 
+}

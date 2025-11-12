@@ -33,3 +33,4 @@ debugInit();
 spawnNewEnemies(); 
 refreshAllUI();
 checkBattleReady();
+executeRound();

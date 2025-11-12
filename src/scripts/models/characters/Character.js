@@ -161,17 +161,16 @@ class Character {
         return this.attributes;
     }
 
-    meleeAttack(target) {
-        if(!target || target.currentHP <1 ) return {damage: 0, didEvade: true, isCritical: false };
-
+    meleeAttack(target) {        
+        if(!target || target.currentHP <1 ){return {damage: 0, didEvade: true, isCritical: false , didKill:false }};
+        let didKill = false;
         console.log(`${this.name} ataca`);
         
-
         // esquiva
         // compara um número aleatório (0-100) com a chance de esquiva do alvo
         if (Math.floor(Math.random() * 101) < target.stats.evasion) {
 
-            return{ damage: 0, didEvade: true, isCritical: false };
+            return{ damage: 0, didEvade: true, isCritical: false, didKill:false  };
         }
 
         let damage = this.stats.damage;
@@ -190,10 +189,11 @@ class Character {
 
         if(target.currentHP >=finalDamage)target.currentHP -= finalDamage
         else{
+            didKill = true;
+            console.log('passo')
             target.currentHP = 0;
         }
-
-        return{ damage: finalDamage, didEvade: false, isCritical: isCritical };
+        return{ damage: finalDamage, didEvade: false, isCritical: isCritical, didKill:didKill };
     }
     rest(){
         //rec. de hp

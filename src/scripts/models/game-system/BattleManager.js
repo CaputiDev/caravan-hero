@@ -81,6 +81,13 @@ BattleManager.prototype.processAllyActions = function(character){
             const attackResult = character.meleeAttack(target);
             
             animate(attackResult, targetCard);
+            if (attackResult.didKill) {
+                character.gainExperience(target.xpGiven);
+
+                playDeathAnimation(targetCard, () => {
+                removeEnemyFromSquad(target);
+            });
+        }
             resolve();
         }, 250);
         return;
@@ -157,9 +164,9 @@ BattleManager.prototype.processAllEffects= function(){
             const hpChange = hpAfter - hpBefore;
 
             if (combatantCard) {
-                if (hpChange > 0) { // Se curou 
+                if (hpChange > 0) { // ganhou vida 
                     showCombatText(combatantCard, `+${hpChange}`, 'heal');
-                } else if (hpChange < 0) { // Se tomou dano
+                } else if (hpChange < 0) { // perdeu vida
                     showCombatText(combatantCard, hpChange, 'damage');
                 }
             }
@@ -176,4 +183,4 @@ BattleManager.prototype.processAllEffects= function(){
     });
 }
 
-BATTLE_MANAGER = new BattleManager();
+const BATTLE_MANAGER = new BattleManager();
