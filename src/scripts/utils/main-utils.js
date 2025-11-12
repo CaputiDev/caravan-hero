@@ -25,19 +25,14 @@ function executeRound() {
 function checkPhaseEnd() {
     console.log("%c--- FASE CONCLUÍDA! ---", "color: #ffd700; font-size: 1.2em;");
     
-    // 1. Avança a Fase
     phaseNumber.textContent = GAME_MANAGER.passPhase();
     
-    // 2. Limpa o campo (remove aliados mortos, se houver)
     refreshAllUI(); 
 
-    // 3. Reseta a rodada para 1
     roundNumber.textContent = GAME_MANAGER.resetRound();
     
-    // 4. Gera novos inimigos
     spawnNewEnemies();
 
-    // 5. Prepara o botão de batalha para a nova fase
     endRoundCleanup();
 }
 
@@ -56,13 +51,19 @@ function calculateCombatOrder() {
 }
 
 function endRound() {
-    console.log('[endRound](LOG):Fim da rodada');
-    
+    console.log("--- Fim do Round ---");
+
     BATTLE_MANAGER.processAllEffects();
 
-    refreshAllUI();
+    refreshAllUI(); 
 
     roundNumber.textContent = GAME_MANAGER.passRound();
+
+    endRoundCleanup();
+}
+
+function endRoundCleanup() {
+    
     window.playerActions = {};
     
     playerArea.querySelectorAll('.action-icon').forEach(icon => {
@@ -70,8 +71,11 @@ function endRound() {
         icon.classList.remove('action-defined'); 
         icon.style.pointerEvents = 'auto'; 
     });
-
-    removeActionsSelection();
+    
+    document.querySelectorAll('.is-being-targeted').forEach(card => {
+        card.classList.remove('is-being-targeted');
+    });
+    
     checkBattleReady();
 }
 //squad
@@ -122,7 +126,6 @@ function addEnemyFromSquad(enemy) {
     }
     window.enemyTeam.push(enemy);
     
-    // Chama as funções de desenho
     updateEnemySquad(enemy);
 }
 
@@ -140,3 +143,40 @@ function removeEnemyFromSquad(enemy) {
     }
 }
 
+function spawnNewEnemies() {
+    window.enemyTeam = [];
+
+    enemyArea.innerHTML = '';
+
+    const currentPhase = GAME_MANAGER.getPhase(); 
+
+    const phaseData = PHASE_ENCOUNTERS[currentPhase];
+
+    if (!phaseData) {
+        console.log("VOCÊ VENCEU! Não há mais fases.");
+        return;
+    }
+
+    const spawnCount = phaseData.spawnCount;
+    const poolKeys = phaseData.pool;
+
+    console.log(`Iniciando Fase ${currentPhase}. Spawning ${spawnCount} inimigos...`);
+
+    for (let i = 0; i < spawnCount; i++) {
+        const randomKey = poolKeys[Math.floor(Math.random() * poolKeys.length)];
+        
+        const enemyMold = ENEMIES_MOLDS[randomKey];
+
+        const newEnemy = new Enemy(
+            enemyMold.name,
+            [enemyMold.attributes.str, enemyMold.attributes.con, enemyMold.attributes.agi, enemyMold.attributes.int, enemyMold.attributes.wis],
+            enemyMold.lvl,
+            enemyMold.tier,
+            enemyMold.description
+        );
+        
+        newEnemy.skills = [...enemyMold.skills];
+        
+        addEnemyFromSquad(newEnemy);
+    }
+}

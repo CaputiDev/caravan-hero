@@ -91,7 +91,7 @@ DamageOverTimeEffect.prototype.onApply = function(caster, target){
 // override de método
 DamageOverTimeEffect.prototype.onTick = function(target) {
     console.log(`[Efeito] ${target.name} sofre ${this.damagePerTick} de dano de ${this.name}!`);
-    if(target.currentHP <= 0)return;    
+    if(target.currentHP <= this.damagePerTick){ this.currentHP = 0; return};     
     target.currentHP -= this.damagePerTick;
 
 }
@@ -111,10 +111,6 @@ StatBuffEffect.prototype.onApply = function(target) {
     console.log(`%c[Efeito] ${target.name} ganha ${this.amount} de ${this.statToBuff}!`, "color: #4CAF50;");
     
     if (target.stats[this.statToBuff] !== undefined) {
-        console.log(target.stats[this.statToBuff]);
-        console.log(this.amount);
-        
-        
         target.stats[this.statToBuff] += this.amount;
 
         if (this.stat === 'hp') {

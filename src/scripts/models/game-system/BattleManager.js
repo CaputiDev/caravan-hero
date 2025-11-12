@@ -6,25 +6,38 @@ BattleManager.prototype.processActions = async function(){
     startBattleButton.disabled = true;
 
     for (const character of window.combatOrder) {
+            refreshAllUI();
 
             if (character.currentHP <= 0) {
                 continue;
             }
-            refreshAllUI();
             if (character instanceof PCharacter) {
-            
                 await BATTLE_MANAGER.processAllyActions(character);
             
             }else if (character instanceof Enemy){
                 await ENEMY_AI.processEnemyAI(character);
         }
-
         await wait(turnDelay);
     }
-    endRound();
+    
+        const alivePlayers = window.team.filter(char => char.currentHP > 0);
+    if (alivePlayers.length === 0) {
+        console.log("GAME OVER");
+        //tela de Game Over
+        return;
+    }
+
+    const aliveEnemies = window.enemyTeam.filter(enemy => enemy.currentHP > 0);
+    if (aliveEnemies.length === 0) {
+        checkPhaseEnd(); 
+    } else {
+        endRound();
+    }
 }
 
 BattleManager.prototype.processAllyActions = function(character){
+
+    return new Promise((resolve) => {
     const actions = window.playerActions;
     const charActions = actions[character.id];
 
@@ -48,12 +61,16 @@ BattleManager.prototype.processAllyActions = function(character){
                 }, 500);
             }
         }
+        resolve();
         return;
     }else if(charActions.type === 'melee'){
 
         const targetId = Number.parseInt(charActions.targetId);
         const target = window.combatOrder.find(enemy => enemy.id == targetId);
-        if (!target) return;
+        if (!target){
+            resolve();
+            return;
+        } 
 
         const attackerCard = playerArea.querySelector(`.player-card[data-id="${character.id}"]`);
         const targetCard = enemyArea.querySelector(`.enemy-card[data-id="${target.id}"]`);
@@ -64,26 +81,25 @@ BattleManager.prototype.processAllyActions = function(character){
             const attackResult = character.meleeAttack(target);
             
             animate(attackResult, targetCard);
-
+            resolve();
         }, 250);
         return;
     }
     else if(charActions.type === 'skill'){
         const targetId = Number.parseInt(charActions.targetId);
         const target = window.combatOrder.find(c => c.id == targetId);
-        if (!target) return;
-
+        if (!target){
+            resolve();
+            return;
+        } 
         const skillId = charActions.skillId;
         const skillToUse = character.skills.find(s => s.id == skillId);
-
-        if (!target) return;
 
         const attackerCard = playerArea.querySelector(`.player-card[data-id="${character.id}"]`);
         const targetCard = enemyArea.querySelector(`.enemy-card[data-id="${target.id}"]`);
 
         playAnimation(attackerCard, 'is-casting', 500); 
         
-
         if (skillToUse.effectToApply) {
             const effect = skillToUse.effectToApply;
             const targetCard = playerArea.querySelector(`.player-card[data-id="${target.id}"]`) ||
@@ -111,16 +127,16 @@ BattleManager.prototype.processAllyActions = function(character){
                 else if (skillResult.type === 'effect') {
                     // aplicou efeito
                     showCombatText(targetCard, skillResult.effect.name, skillResult.effect.effectType);
+                    resolve();
                 }
             }
             refreshAllUI();
         } else{
             console.error(`[BATTLE-MANAGER] Erro: Personagem não tem habilidade com SkillId: ${skillId}`);
-
         }
-        
+        resolve();
     }
-    return;
+    });
 }
 
 BattleManager.prototype.processAllEffects= function(){
