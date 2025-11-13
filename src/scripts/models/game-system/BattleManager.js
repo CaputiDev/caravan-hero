@@ -27,9 +27,11 @@ BattleManager.prototype.processActions = async function(){
         return;
     }
 
+    //se inimigos estao derrotados, comeca outra fase
     const aliveEnemies = window.enemyTeam.filter(enemy => enemy.currentHP > 0);
     if (aliveEnemies.length === 0) {
-        await wait(turnDelay);
+        await wait(1000);
+        endRound();
         checkPhaseEnd(); 
     } else {
         endRound();
@@ -168,7 +170,7 @@ BattleManager.prototype.processAllEffects = function(){
             const effect = character.effects[i];
             const hpBefore = character.currentHP;
             
-            effect.onTick(character);
+            effect.onTick(null,character);
             
             const hpAfter = character.currentHP;
             const hpChange = hpAfter - hpBefore;
@@ -205,7 +207,7 @@ BattleManager.prototype.processAllEffects = function(){
             effect.duration--;
             if (effect.duration <= 0) {
                 if (typeof effect.onRemove === 'function') {
-                    effect.onRemove(character);
+                    effect.onRemove(null,character);
                 }
                 character.effects.splice(i, 1);
             }

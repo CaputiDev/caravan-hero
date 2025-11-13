@@ -50,14 +50,15 @@ function calculateCombatOrder() {
     
 }
 
-function endRound() {
+function endRound(passRound = true) {
     console.log("--- Fim do Round ---");
 
     BATTLE_MANAGER.processAllEffects();
 
     refreshAllUI(); 
 
-    roundNumber.textContent = GAME_MANAGER.passRound();
+    if(passRound){roundNumber.textContent = GAME_MANAGER.passRound()};
+    
 
     endRoundCleanup();
 }

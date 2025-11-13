@@ -30,28 +30,41 @@ function Effect(name, icon, description,effectType, rarity = 'common'){
 }
 
 Effect.prototype.applyEffect = function(caster, target, duration) {
-    let existingEffect = target.effects.find(e => e.name === this.name);
     
     const newInstance = Object.create(Object.getPrototypeOf(this));
     Object.assign(newInstance, this);
-
     newInstance.duration = duration;
     newInstance.id = getNextEffectId();
-
     newInstance.casterId = caster.id;
-    if (existingEffect) {
-        existingEffect = newInstance;
-
-        if (typeof existingEffect.onApply === 'function') {
-        newInstance.onApply(caster ,target);
-        }
-        return;
-    }
+    
     if (typeof newInstance.onApply === 'function') {
         newInstance.onApply(caster, target);
     }
 
+    const existingEffectIndex = target.effects.findIndex(e => e.name === this.name);
+
+    if (existingEffectIndex > -1) {
+        const existingEffect = target.effects[existingEffectIndex];
+        
+        if (newInstance.power > existingEffect.power) {
+            
+            if (typeof existingEffect.onRemove === 'function') {
+                existingEffect.onRemove(target);
+            }
+            
+            target.effects[existingEffectIndex] = newInstance;
+            console.log(`[Efeito] ${newInstance.name} (mais forte) substituiu o antigo.`);
+        
+        } else {
+            existingEffect.duration = duration;
+            existingEffect.casterId = caster.id; // Atualiza o "dono"
+            console.log(`[Efeito] ${existingEffect.name} teve a duração renovada (o novo não era mais forte).`);
+        }
+        return;
+    }
+    
     target.effects.push(newInstance);
+    refreshAllUI();
 }
 
 //Métodos virtuais (placeholders para efeitos especificos)
@@ -59,9 +72,9 @@ Effect.prototype.applyEffect = function(caster, target, duration) {
 // Chamado no momento em que o efeito é aplicado
 Effect.prototype.onApply = function(caster, target) {}
 // Chamado a cada turno que o efeito está ativo
-Effect.prototype.onTick = function(target) {}
+Effect.prototype.onTick = function(caster,target) {}
 // Chamado quando a duração chega a 0 e o efeito é removido
-Effect.prototype.onRemove = function(target) {}
+Effect.prototype.onRemove = function(caster,target) {}
 
 //classes especificas de efeito (Classes-filho)
 
@@ -85,6 +98,8 @@ DamageOverTimeEffect.prototype.onApply = function(caster, target){
 
     //dano base + stat
     this.damagePerTick = Math.round(this.baseDamage * casterStatValue);
+
+    this.power = this.damagePerTick;
 }
 
 // override de método
@@ -106,25 +121,27 @@ function StatBuffEffect(name, icon, description, statToBuff, amount, rarity = 'c
 StatBuffEffect.prototype = Object.create(Effect.prototype);
 StatBuffEffect.prototype.constructor = StatBuffEffect;
 
-StatBuffEffect.prototype.onApply = function(target) {
+StatBuffEffect.prototype.onApply = function(caster, target) {
     console.log(`%c[Efeito] ${target.name} ganha ${this.amount} de ${this.statToBuff}!`, "color: #4CAF50;");
     
     if (target.stats[this.statToBuff] !== undefined) {
         target.stats[this.statToBuff] += this.amount;
 
-        if (this.stat === 'hp') {
+        if (this.statToBuff === 'hp') {
             target.currentHP += this.amount;
-        } else if (this.stat === 'mana') {
+        } else if (this.statToBuff === 'mana') {
             target.currentMana += this.amount;
         }
     }
+    this.power = this.amount;
 }
 
-StatBuffEffect.prototype.onRemove = function(target) {
-    console.log(`%c[Efeito] ${target.name} ganha ${this.amount} de ${this.stat}!`, "color: #4CAF50;");
+StatBuffEffect.prototype.onRemove = function(caster, target) {
+    console.log(`%c[Efeito] ${target.name} perde ${this.amount} de ${this.statToBuff}!`, "color: #4CAF50;");
     
     if (target.stats[this.statToBuff] !== undefined) {
-        target.stats[this.statToBuff] -= this.amount;
+
+        target.recalculateAll();
     }
 
     if (this.statToBuff === 'hp' && target.currentHP > target.stats.hp) {
@@ -151,6 +168,7 @@ HealOverTimeEffect.prototype.constructor = HealOverTimeEffect;
 HealOverTimeEffect.prototype.onApply= function(caster, target){
     const casterStatValue = caster.stats[this.scalingStat];
     this.healPerTick = Math.round(caster.stats['hp_regen'] / this.duration);
+    this.power = this.healPerTick;
 }
 HealOverTimeEffect.prototype.onTick = function(target) {
     console.log(`%c[Efeito] ${target.name} recupera ${this.healPerTick} de HP de ${this.name}!`, "color: #4CAF50;");

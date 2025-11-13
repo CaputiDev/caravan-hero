@@ -56,6 +56,16 @@ class PCharacter extends Character {
         if (this.currentMana > this.stats.mana) {
             this.currentMana = this.stats.mana;
         }
+        console.log(this.effects);
+        
+        if(this.effects.length !== 0){
+            this.effects.forEach(effect => {
+                if(effect instanceof StatBuffEffect){
+                    effect.onApply(null, this);
+                } 
+                
+            });
+        }
 
         console.log(`%c${this.name} subiu para o NÍVEL ${this.lvl}!`, "color: yellow; font-weight: bold;");
         refreshAllUI();
