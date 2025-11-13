@@ -279,7 +279,6 @@ function showCombatText(targetCard, text, type) {
     const combatTextMold = document.getElementById('combat-text-popup');
     
     if (!targetCard || !combatTextMold) {
-        console.error("Alvo ou Molde do popup de combate não encontrado!");
         return;
     }
     
@@ -326,3 +325,17 @@ function animate(attackResult, targetCard){
             }
             refreshAllUI(); 
         }
+
+        function playDeathAnimation(targetCard, onAnimationEnd) {
+    if (!targetCard) return;
+
+    targetCard.classList.add('is-dead');
+    
+    setTimeout(() => {
+        targetCard.remove();
+        
+        if (onAnimationEnd) {
+            onAnimationEnd();
+        }
+    }, 500);
+}
