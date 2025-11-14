@@ -20,7 +20,7 @@ const ENEMY_CLASS_TEMPLATES = {
     'tanque': {
         name: "Tanque",
         description: "Uma muralha ambulante.",
-        weights: { str: 0, con: 6, agi: 1, int: 0, wis: 3 } 
+        weights: { str: 1, con: 6, agi: 1, int: 0, wis: 3 } 
     },
     'feiticeiro': {
         name: "Feiticeiro",
@@ -30,6 +30,6 @@ const ENEMY_CLASS_TEMPLATES = {
     'sabio': {
         name: "Sábio",
         description: "Curandeiro com uma paz inabalável.",
-        weights: { str: 0, con: 2, agi: 1, int: 2, wis: 4 }
+        weights: { str: 1, con: 2, agi: 1, int: 2, wis: 4 }
     }
 };
