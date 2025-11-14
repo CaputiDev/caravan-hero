@@ -124,7 +124,7 @@ function addEnemyFromSquad(enemy) {
         console.warn(`Já existe no time! Não há necessidade de adicionar ${enemy.name}.`);
         return;
     }
-    if (window.enemyTeam.length >= 6) {
+    if (window.enemyTeam.length >= 8) {
         console.warn(`Time cheio! Não foi possível adicionar ${enemy.name}.`);
         return;
     }
@@ -152,8 +152,7 @@ function spawnNewEnemies() {
     window.enemyTeam = [];
     enemyArea.innerHTML = ''; 
 
-    //a cada 5 fases aumenta 1 inimigo
-    const enemyCount = ENEMY_GENERATOR.calculateNumberOfEnemies();; 
+    const enemyCount = ENEMY_GENERATOR.calculateNumberOfEnemies(); 
 
     console.log(`Fase ${GAME_MANAGER.getPhase()}. Spawning ${enemyCount} inimigos...`);
 
