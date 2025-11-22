@@ -15,7 +15,7 @@ function getNextCharacterId() {
 }
 // personagem generico
 class Character {
-    constructor(name, [str, con, agi, int, wis], lvl = 1, tier = 1) {
+    constructor(name, attributesInput, lvl = 1, tier = 1) {
         //id universal
         this.id = getNextCharacterId();
 
@@ -23,14 +23,22 @@ class Character {
         this.lvl = lvl;
         this.tier = tier;
 
-        this.attributes = {
-            str: str,
-            con: con,
-            agi: agi,
-            int: int,
-            wis: wis
-        };
-        
+        if (Array.isArray(attributesInput)) {
+            const [str, con, agi, int, wis] = attributesInput;
+            this.attributes = {
+                str: str,
+                con: con,
+                agi: agi,
+                int: int,
+                wis: wis
+            }
+        }else if (typeof attributesInput === 'object' && attributesInput !== null) {
+            this.attributes = { ...attributesInput }; 
+        } else {
+
+            console.error(`Atributos inválidos para ${name}!`, attributesInput);
+            this.attributes = { str: 1, con: 1, agi: 1, int: 1, wis: 1 };
+        }
         this.modifiers = null; 
         this.stats = null;
         this.effects = [];
@@ -59,7 +67,7 @@ class Character {
                 throw new Error('Error: invalid operator');
             }
     }
-    _calculateStat(modifierName, attributeConfig , atrWeight = 1, op = '*', forceInt = true) {
+    _calculateStat(modifierName, attributeConfig , atrWeight = 1, forceInt = true) {
         const modifier = this.modifiers[modifierName];
         let attributeValue = 0;
 
@@ -78,28 +86,16 @@ class Character {
                     totalWeight += weight;
                 }
             }
-            
-            
             attributeValue = (totalWeight > 0) ? (totalValue / totalWeight) : 0;
         
         } else {
             throw new Error('Tipo de atributo inválido: ' + attributeConfig);
         }
 
-        //comeca fraco e escalona muito late game
-            if(op === '*'){
-                if(forceInt){return Math.round(modifier * (attributeValue * this.tier))};
-                return modifier * (attributeValue * this.tier);
-
-            //comeca mais forte, mas escala menos late game
-            }else if(op === '+'){
                 if(forceInt){return Math.round(modifier + (attributeValue * this.tier))};
                 
                 return modifier + (attributeValue * this.tier);
-                
-            }else{
-                throw new Error('Error: invalid operator');
-            }
+
     }
     
     recalculateAll() {
@@ -127,19 +123,19 @@ class Character {
         this.stats = {
             // FOR
             "damage": this._calculateStat("damage", "str",2),
-            "critical_multiplier": this._calculateStat("critical_multiplier","str",0.25,'+',false),
+            "critical_multiplier": this._calculateStat("critical_multiplier","str",0.25,false),
             
             // AGI
             "initiative": this._calculateStat("initiative", "agi"),
-            "evasion": this._calculateStat("evasion", "agi",1.5,'*',false),
-            "critical_chance": this._calculateStat("critical_chance", "agi",1.5,'*',false),
+            "evasion": this._calculateStat("evasion", "agi",1.5,false),
+            "critical_chance": this._calculateStat("critical_chance", "agi",1.5,false),
 
             // CON
             "hp": this._calculateStat("hp", "con", 3),
             "armor": this._calculateStat("armor", "con",),
 
             // INT
-            "mana": this._calculateStat("mana", {"int":6,"wis":3},1,"*"),
+            "mana": this._calculateStat("mana", {"int":6,"wis":3},1),
             "skill": this._calculateStat("skill", "int",2),
 
             // SAB
@@ -154,6 +150,9 @@ class Character {
 
         if(this.stats['critical_chance'] >= 85){
             this.stats['critical_chance'] = 85
+        } 
+        if(this.stats['critical_multiplier'] >= 10){
+            this.stats['critical_multiplier'] = 10
         }   
     }
 
@@ -187,7 +186,7 @@ class Character {
         let finalDamage = damage - target.stats.armor;
         if (finalDamage < 1) finalDamage = 1;
 
-        if(target.currentHP >=finalDamage)target.currentHP -= finalDamage
+        if(target.currentHP > finalDamage)target.currentHP -= finalDamage
         else{
             didKill = true;
             console.log('passo')

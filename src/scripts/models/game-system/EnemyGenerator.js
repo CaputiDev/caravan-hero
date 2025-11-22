@@ -9,13 +9,10 @@ EnemyGenerator.prototype.generateEnemy = function() {
     const currentPhase = GAME_MANAGER.getPhase();
     const statPool = GAME_MANAGER.getEnemyStatPool();
 
-    // Calcula Lvl e Tier
-    // Lvl: +1 a cada 2 fases
-    const newLevel = 1 + Math.floor((currentPhase - 1) / 2);
-    
-    // Tier: +1 a cada 10 fases
-    const newTier = 1 + Math.floor((currentPhase - 1) / 10);
+    const { level, tier } = this._calculateLevelAndTier(currentPhase);
 
+    // Calcula Lvl e Tier
+    
     // Escolhe aleatoriamente uma Classe inimiga
     const classKeys = Object.keys(ENEMY_CLASS_TEMPLATES);
     const randomClassKey = classKeys[Math.floor(Math.random() * classKeys.length)];
@@ -25,14 +22,14 @@ EnemyGenerator.prototype.generateEnemy = function() {
     const attributesArray = this._distributeStatPoints(classTemplate, statPool);
     
     // Cria um nome (deverá ser puxado dinamicamente)
-    const enemyName = `${classTemplate.name} Nv.${newLevel}`; 
+    const enemyName = `${classTemplate.name}`; 
     
     // Cria a nova instância do Inimigo
     const newEnemy = new Enemy(
         enemyName,
         attributesArray,
-        newLevel,
-        newTier,
+        level,
+        tier,
         classTemplate.description
     );
     
@@ -44,6 +41,45 @@ EnemyGenerator.prototype.generateEnemy = function() {
     return newEnemy;
 }
 
+EnemyGenerator.prototype._calculateLevelAndTier = function(currentPhase) {
+
+    //          RNG DO LVL INIMIGO
+    //    Define a variação aleatória (ex: -1, 0, ou +1)
+    //    (Math.random() * 3) dá um número entre 0 e 2.99...
+    //    Math.floor() arredonda para 0, 1, ou 2
+    //    Subtrair 1 nos dá: -1, 0, or 1
+
+    const levelVariation = Math.floor(Math.random() * 3) - 1; 
+
+    let phasePoints = currentPhase + levelVariation;
+
+    if (phasePoints < 1) {
+        phasePoints = 1;
+    }
+
+    let tier = 1;
+    let level = 1;
+    
+    let maxLevelForThisTier = 10; 
+
+    // Loop de Rebirth
+    while (true) {
+        // Se os pontos de fase são menores ou iguais ao custo
+        if (phasePoints <= maxLevelForThisTier) {
+            level = phasePoints;
+            break;
+        } else {
+
+            phasePoints -= maxLevelForThisTier;
+            tier++;
+            
+            maxLevelForThisTier += 10;
+            
+        }
+    }
+    
+    return { level, tier };
+}
 EnemyGenerator.prototype._distributeStatPoints = function(classTemplate, statPool) {
     
     let attributes = { str: 1, con: 1, agi: 1, int: 1, wis: 1 };
@@ -80,9 +116,19 @@ EnemyGenerator.prototype._distributeStatPoints = function(classTemplate, statPoo
 
 EnemyGenerator.prototype.calculateNumberOfEnemies = function(){
     const currentPhase = GAME_MANAGER.getPhase();
-    //a cada 5 fases aumenta 1 inimigo
-    let enemiesNum = 1 + Math.floor((currentPhase - 1) / 5);
+    let enemiesNum;
+
+    //comeca em 10, e dobra 
+    if(currentPhase >= GAME_MANAGER.getEnemiesNumValidation()){
+        enemiesNum = GAME_MANAGER.increaseEnemysNum();
+        GAME_MANAGER.increaseEnemiesNumValidation();
+    }
+    else{
+        enemiesNum = GAME_MANAGER.getEnemysNum();
+    }
+
     //num máximo de inimigos
+
     if(enemiesNum > 6) enemiesNum = 6;
     
     return enemiesNum;
