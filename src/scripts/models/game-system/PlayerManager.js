@@ -10,6 +10,7 @@ PlayerManager.prototype.getGold = function(){
 
 PlayerManager.prototype.addGold = function(n){
     if(typeof n === 'number' && n >0){
+        Math.round(n);
         this.gold += n;
     }
     return this.gold;

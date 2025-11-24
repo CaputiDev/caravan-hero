@@ -31,9 +31,11 @@ function checkPhaseEnd() {
 
     roundNumber.textContent = GAME_MANAGER.resetRound();
     
-    spawnNewEnemies();
-
-    endRoundCleanup();
+    setTimeout(() => {
+            REWARD_MANAGER.showRewards();
+            
+            endRoundCleanup(); 
+        }, 1000);
 }
 
 //funcoes auxiliares
@@ -161,5 +163,44 @@ function spawnNewEnemies() {
         const newEnemy = ENEMY_GENERATOR.generateEnemy();
         
         addEnemyFromSquad(newEnemy);
+    }
+}
+
+// Controle de Destrancar Loja
+function checkShopAvailability() {
+    const currentPhase = GAME_MANAGER.getPhase();
+    
+    // Destranca a cada 5 fases (5, 10, 15...)
+    if (currentPhase % 5 === 0) {
+
+        // LOJA ABERTA
+        recruitIcon.classList.remove('locked');
+        recruitIcon.removeAttribute('data-tooltip'); // Remove o tooltip de bloqueio
+        recruitIcon.title = "Abrir Loja"; // Tooltip nativo simples quando aberta
+        
+        // Gera nova loja e avisa (apenas na primeira vez que abre na fase)
+        // (Você pode adicionar uma flag para não gerar toda hora se quiser)
+        SHOP_MANAGER.generateShop();
+        drawShop();
+        
+    } else {
+
+        // LOJA TRANCADA
+        recruitIcon.classList.add('locked');
+        
+        // Calcula a próxima fase múltipla de 5
+        // Ex: Fase 1 -> Teto(0.2) = 1 * 5 = 5
+        // Ex: Fase 6 -> Teto(1.2) = 2 * 5 = 10
+        const nextShopPhase = Math.ceil(currentPhase / 5) * 5;
+        
+        //  Define o texto no atributo para o CSS ler
+        recruitIcon.setAttribute('data-tooltip', `Loja abre na fase: ${nextShopPhase}`);
+        
+        // Remove o 'title' nativo para não ter dois tooltips um em cima do outro
+        recruitIcon.removeAttribute('title');
+
+        // Fecha o painel se estiver aberto
+        recruitPanel.classList.remove('is-open');
+        document.body.classList.remove('shop-is-open');
     }
 }

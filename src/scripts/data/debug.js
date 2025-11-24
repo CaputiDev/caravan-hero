@@ -13,8 +13,12 @@ function debugInit(){
     console.warn(`Falha ao carregar dados. Criando time de DEBUG com 6 membros.`);
 
     window.team = [
-        new PCharacter('Guerreiro', [3, 3, 2, 1, 1]),
-        new PCharacter('Mago',      [1, 2, 1, 4, 1]),
+        new PCharacter('Guerreiro', [8, 3, 2, 1, 1]),
+        new PCharacter('Jerson',      [1, 2, 1, 4, 1]),
+        new PCharacter('Claudio', [3, 3, 2, 1, 1]),
+        new PCharacter('Edilson',      [1, 2, 1, 4, 1]),
+        new PCharacter('Cleber', [3, 3, 2, 1, 1]),
+        new PCharacter('Jair',      [1, 2, 1, 4, 1]),
     ];
 
     window.team.forEach(character => {

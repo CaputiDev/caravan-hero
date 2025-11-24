@@ -201,26 +201,14 @@ skillPopup.addEventListener('click', (event) => {
 
 // Abrir o Painel de Recrutamento
 recruitIcon.addEventListener('click', () => {
+    if (recruitIcon.classList.contains('locked')) {
+        return;
+    }
     recruitPanel.classList.add('is-open');
     document.body.classList.add('shop-is-open');
 });
-recruitPanel.addEventListener('click', (event) => {
-    if (event.target.classList.contains('recruit-btn')) {
-        const index = parseInt(event.target.dataset.index, 10);
-        
-        // Tenta comprar
-        const success = SHOP_MANAGER.buyMercenary(index);
-        
-        if (success) {
-            // Se comprou: atualiza ouro e redesenha a loja
-            goldAmount.textContent = PLAYER_MANAGER.getGold();
-            drawShop();
-        } else {
-            // (Opcional) Feedback visual de erro
-            alert("Não foi possível contratar (Sem ouro ou time cheio).");
-        }
-    }
-});
+
+
 // Fechar Painéis (Recrutar ou Habilidades)
 closeButtons.forEach(button => {
     button.addEventListener('click', () => {
@@ -381,5 +369,76 @@ levelUpModal.addEventListener('click', (event) => {
     
     if (event.target.closest('.close-panel-btn')) {
         closeLevelUpModal();
+    }
+});
+
+recruitPanel.addEventListener('click', (event) => {
+    // Garante que, se o usuário clicar em um elemento interno, pegamos o botão correto
+    const btn = event.target.closest('.recruit-btn');
+    if (!btn) return;
+
+    const index = parseInt(btn.dataset.index, 10);
+    const merc = SHOP_MANAGER.shopInventory[index];
+    if (!merc) {
+        console.error("Erro: Mercenário não encontrado.");
+        return;
+    }
+
+    // Verifica se o botão JÁ está no modo de confirmação (Verde)
+    const isConfirming = btn.classList.contains('confirm');
+
+    if (!isConfirming) {
+        // --- ESTADO 1: PRIMEIRO CLIQUE (Validação) ---
+        let errorMsg = null;
+        if (PLAYER_MANAGER.getGold() < merc.cost) errorMsg = "Sem Ouro!";
+        else if (window.team.length >= MAX_TEAM_SIZE) errorMsg = "Lotado!";
+
+        if (errorMsg) {
+            // Feedback de Erro
+            const originalText = btn.textContent; // Salva o texto original ("Contratar")
+            btn.textContent = errorMsg;
+            btn.classList.add('error');
+
+            setTimeout(() => {
+                // Restaura o estado original se der erro
+                btn.textContent = originalText;
+                btn.classList.remove('error');
+            }, 1000);
+            return; // Para aqui
+        }
+
+        // Se validou, muda para o estado de confirmação
+        const originalText = btn.textContent;
+        btn.textContent = "Confirmar?";
+        btn.classList.add('confirm');
+
+        // Adiciona um timer para reverter o estado de confirmação após 3s
+        if (btn.dataset.confirmTimer) {
+            clearTimeout(Number(btn.dataset.confirmTimer));
+            delete btn.dataset.confirmTimer;
+        }
+        const timerId = setTimeout(() => {
+            if (btn.classList.contains('confirm')) {
+                btn.classList.remove('confirm');
+                btn.textContent = originalText;
+            }
+            delete btn.dataset.confirmTimer;
+        }, 3000);
+        btn.dataset.confirmTimer = String(timerId);
+
+        // O código TERMINA aqui. O usuário precisa clicar de novo.
+    } else {
+        // --- ESTADO 2: SEGUNDO CLIQUE (Compra) ---
+        // Limpa timer de confirmação, se houver
+        if (btn.dataset.confirmTimer) {
+            clearTimeout(Number(btn.dataset.confirmTimer));
+            delete btn.dataset.confirmTimer;
+        }
+
+        const success = SHOP_MANAGER.buyMercenary(index);
+        if (success) {
+            goldAmount.textContent = PLAYER_MANAGER.getGold();
+            drawShop(); // Redesenha a loja (reseta os botões)
+        }
     }
 });

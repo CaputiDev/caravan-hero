@@ -18,6 +18,7 @@
     <script src="../scripts/models/game-system/EnemyGenerator.js" defer></script>
     <script src="../scripts/models/game-system/ShopManager.js" defer></script>
     <script src="../scripts/models/game-system/MercenaryGenerator.js" defer></script>
+    <script src="../scripts/models/game-system/RewardManager.js" defer></script>
     <script src="../scripts/models/characters/Character.js" defer></script>
     <script src="../scripts/models/characters/PCharacter.js" defer></script>
     <script src="../scripts/models/data_models/Effect.js" defer></script>
@@ -94,6 +95,12 @@
             </div>
         </div>
     </aside>
+    <div id="reward-modal" class="modal-panel hidden">
+        <div class="modal-content" style="width: 600px;"> <div class="panel-title">Fase Concluída! Escolha uma Recompensa:</div>
+            <div id="reward-options-container" style="display: flex; gap: 15px; justify-content: center;">
+                </div>
+        </div>
+    </div>
 
     <div id="level-up-modal" class="modal-panel hidden">
         <div class="modal-content">

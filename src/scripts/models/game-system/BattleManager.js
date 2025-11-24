@@ -62,10 +62,16 @@ BattleManager.prototype.processAllyActions = function(character){
             if (card) {
                 if (hpGained > 0) {
                     showCombatText(card, `+${hpGained}`, 'heal');
+                }else{
+                    showCombatText(card, `+${0}`, 'heal');
                 }
                 if (manaGained > 0) {
                     setTimeout(() => {
                         showCombatText(card, `+${manaGained}`, 'mana');
+                    }, 500);
+                }else{
+                    setTimeout(() => {
+                        showCombatText(card, `+${0}`, 'mana');
                     }, 500);
                 }
             }

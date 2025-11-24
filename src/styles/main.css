@@ -1131,3 +1131,89 @@ body.targeting-ally .player-card.is-targeting {
     font-weight: bold;
     color: var(--gold-color);
 }
+
+/* botoes da loja */
+.recruit-btn.confirm {
+    background-color: var(--success-color);
+    color: white;
+    animation: pulse 0.5s infinite;
+}
+
+.recruit-btn.error {
+    background-color: var(--hp-color);
+    color: white;
+    cursor: not-allowed;
+}
+
+#recruit-icon.locked {
+    filter: grayscale(100%);
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.reward-card {
+    flex: 1;
+    background-color: var(--card-bg);
+    border: 2px solid var(--border-color);
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.2s, border-color 0.2s;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+}
+
+.reward-card:hover {
+    transform: translateY(-10px);
+    border-color: var(--gold-color);
+    box-shadow: 0 0 15px var(--gold-color);
+}
+
+.reward-icon {
+    font-size: 3em;
+    margin-bottom: 10px;
+}
+
+.reward-title {
+    font-weight: bold;
+    font-size: 1.2em;
+    color: var(--light-text-color);
+}
+
+.reward-desc {
+    font-size: 0.9em;
+    color: #ccc;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+#recruit-icon.locked:hover::after {
+    /* Pega o texto direto do atributo HTML que vamos definir no JS */
+    content: attr(data-tooltip);
+    
+    position: absolute;
+    bottom: 120%; /* Aparece acima do botão */
+    right: 0;     /* Alinhado à direita */
+    
+    /* Estilo Visual (Igual aos seus outros tooltips) */
+    background-color: #111;
+    color: var(--text-color); /* ou var(--gold-color) se preferir destaque */
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    padding: 8px 12px;
+    
+    font-size: 0.9rem;
+    font-weight: normal;
+    text-transform: none; /* Remove o uppercase do botão */
+    white-space: nowrap;  /* Texto em uma linha */
+    box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+    z-index: 1000;
+    pointer-events: none;
+}

@@ -372,7 +372,7 @@ function animate(attackResult, targetCard){
 const recruitContent = document.querySelector('#recruit-panel .panel-content');
 
 function drawShop() {
-    recruitContent.innerHTML = ''; // Limpa a loja atual
+    recruitContent.innerHTML = ''; 
 
     if (SHOP_MANAGER.shopInventory.length === 0) {
         recruitContent.innerHTML = '<div style="padding:10px; text-align:center;">Loja Esgotada!</div>';
@@ -389,7 +389,7 @@ function drawShop() {
                 <span class="merc-name">${merc.name}</span>
                 <span class="merc-vocation">${merc.vocationName} (Nv.${merc.lvl})</span>
                 <div class="merc-stats-mini">
-                   ⚔️${merc.stats.damage} ❤️${merc.stats.hp} 🌀${merc.stats.mana}
+                    ⚔️${merc.stats.damage} ❤️${merc.stats.hp} 🌀${merc.stats.mana}
                 </div>
             </div>
             <div class="merc-buy">
