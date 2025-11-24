@@ -10,7 +10,6 @@ const enemyArea = document.getElementById('enemy-area');
 const playerArea = document.getElementById('player-area');
 const recruitIcon = document.getElementById('recruit-icon');
 const recruitPanel = document.getElementById('recruit-panel');
-const skillsPanel = document.getElementById('skills-panel');
 const enemyTooltip = document.getElementById('enemy-tooltip');
 const closeButtons = document.querySelectorAll('.close-panel-btn');
 const blurBackdrop = document.getElementById('blur-backdrop');
@@ -204,10 +203,6 @@ skillPopup.addEventListener('click', (event) => {
 recruitIcon.addEventListener('click', () => {
     recruitPanel.classList.add('is-open');
     document.body.classList.add('shop-is-open');
-});
-// Abrir o Painel de Habilidades
-skillsIcon.addEventListener('click', () => {
-    skillsPanel.classList.remove('hidden');
 });
 // Fechar Painéis (Recrutar ou Habilidades)
 closeButtons.forEach(button => {

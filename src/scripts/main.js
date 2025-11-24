@@ -1,25 +1,19 @@
 let firstCharData = localStorage.getItem('FirstCharData');
 if(firstCharData != null){
-    // ... (JSON.parse, etc.)
     firstCharData = JSON.parse(firstCharData);
-    
-    // 1. 'attributesObject' é o {str: 2, con: 2, ...}
+
     let attributesObject = firstCharData.attributes;
     
-    // 2. [CORREÇÃO] Não precisa mais do 'attributesArray'
-    //    Passe o OBJETO diretamente.
     const firstChar = new PCharacter(
         firstCharData.name, 
-        attributesObject, // <-- PASSA O OBJETO
+        attributesObject,
         firstCharData.lvl,
         firstCharData.tier,
         firstCharData.vocation
     );
     
-    // 3. (Restaura o estado)
     firstChar.currentHP = firstCharData.currentHP;
     firstChar.currentMana = firstCharData.currentMana;
-    // ... (etc.)
 
     addCharToSquad(firstChar);
     console.log("Personagem carregado:", firstChar);
