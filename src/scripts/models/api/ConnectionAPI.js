@@ -1,15 +1,13 @@
 class ConnectionAPI {
     static #MAX_REQUESTS = 5000;
 
-    constructor(seed) {
-        this.seed = seed;
+    constructor() {
+        const base_url = 'https://randomuser.me/api/';
+        const base_query = '?noinfo';
         this.query = '';
         this.fields = [];
         this.amount = 1;
-
-        const base_url = 'https://randomuser.me/api/';
-        const seed_query = `?seed=${encodeURIComponent(this.seed)}`;
-        this.url = base_url + seed_query;
+        this.url = base_url + base_query;
     }
 
     #resetReq() {
@@ -38,7 +36,7 @@ class ConnectionAPI {
             final_url += `&inc=${this.fields.join(",")}`;
 
         try {
-            const res = await fetch(final_url + '&noinfo');
+            const res = await fetch(final_url);
             if (!res.ok) throw new Error(`HTTP ${res.status}`);
 
             const data = await res.json();
