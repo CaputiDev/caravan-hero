@@ -106,7 +106,7 @@ function drawCrew(character) {
             <div class="action-icon" data-action-type="rest" title="Descansar">💤</div>
         </div>
         <div class="player-name">${character.name}</div>
-        <div class="player-sprite"></div>
+        <div class="player-sprite"><img src=${character.avatar.large}></div>
         <div class="player-lvl">Lvl ${character.lvl}</div>
         <div class="player-stats-area">
             <div class="player-atk">
@@ -148,7 +148,7 @@ function drawCrew(character) {
 function updateSquad(character){
     drawCrew(character);
     drawRoster(character);
-    }
+}
 
 
 //enemy draws
@@ -174,7 +174,7 @@ function drawEnemy(enemy) {
 
     const newInnerCardHTML = `
         <div class="player-name">${enemy.name}</div>
-        <div class="player-sprite"></div>
+        <div class="player-sprite"><img src=${enemy.avatar.large}></div>
         <div class="player-lvl">Lvl ${enemy.lvl}</div>
         <div class="player-stats-area">
             <div class="player-atk">

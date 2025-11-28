@@ -1,6 +1,6 @@
 // essa classe é especifica de personagens jogaveis, não é um personagem genérico.
 class PCharacter extends Character {
-    constructor(name, attributesInput, avatarObj, lvl,tier,vocation) {
+    constructor(name, attributesInput, avatarObj, lvl, tier,vocation) {
         super(name, attributesInput, avatarObj, lvl, tier); 
 
         //kit inicial

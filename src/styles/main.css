@@ -257,6 +257,14 @@ body {
     border: 1px solid var(--border-color);
 }
 
+.player-sprite img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;  /* corta e mantém proporção */
+    border-radius: 8px; /* opcional */
+}
+
+
 /* Level (Abaixo da Foto) */
 .player-lvl {
     text-align: center;

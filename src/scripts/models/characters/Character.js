@@ -19,9 +19,20 @@ class Character {
     constructor(name, attributesInput, avatarObj = null, lvl = 1, tier = 1) {
         //id universal
         this.id = getNextCharacterId();
+        
+        if (typeof name === "object" && typeof name.name === "object")
+            this.name = name.name;
+        else
+            this.name = name;
+        this.name = this.#generateUniqueName(this.name);
 
-        this.name = this.#generateUniqueName(name);
-        this.avatar = typeof avatarObj === 'object' ? avatarObj : null;
+        if (avatarObj && typeof avatarObj === "object") {
+            if ("picture" in avatarObj && typeof avatarObj.picture === "object") 
+                this.avatar = { ...avatarObj.picture };
+            else 
+                this.avatar = { ...avatarObj };
+        } else this.avatar = null;
+
         this.lvl = lvl;
         this.tier = tier;
 
@@ -54,84 +65,72 @@ class Character {
         //habilidades passivas, geralmente com relacao a vocacao(alidos) ou classe(time inimigo)
         this.passive_skills = [];
     }
-    #generateUniqueName(nameObj, removeChance = 0.25, epicChance = 0.25) {
-        if (typeof nameObj === 'string') return nameObj;
+    #generateUniqueName(nameObj, removeChance = 0.25, titleChance = 0.1) {
+        if (typeof nameObj === 'string') return capitalizeSmart(nameObj);
 
-        const { title, first, last } = nameObj;
+        // Garantir strings e trim
+        const title = (nameObj.title || '').trim();
+        const first = (nameObj.first || '').trim();
+        const last = (nameObj.last || '').trim();
 
-        // --- PARTE 1: EMBARALHAMENTO DAS PARTES ---
-        let parts = [title, first, last];
+        if (!title && !first && !last) return 'Unknown';
 
+        // PARTES INICIAIS
+        let parts = [first, last];
+
+        // Adiciona title com chance menor
+        if (title && Math.random() < titleChance) parts.unshift(title);
+
+        // Shuffle Fisher–Yates melhorado
         for (let i = parts.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
-            [parts[i], parts[j]] = [parts[j]], [parts[i]];
+            [parts[i], parts[j]] = [parts[j], parts[i]];
         }
 
-        // --- PARTE 2: MIX DE SÍLABAS ---
-        const f1 = first.slice(0, Math.ceil(first.length / 2));
-        const f2 = first.slice(Math.ceil(first.length / 2));
+        // Mix de sílabas se houver first e last
+        let mixedFirst = first || last || title;
+        if (first && last) {
+            const fMid = Math.ceil(first.length / 2);
+            const lMid = Math.ceil(last.length / 2);
 
-        const l1 = last.slice(0, Math.ceil(last.length / 2));
-        const l2 = last.slice(Math.ceil(last.length / 2));
+            const f1 = first.slice(0, fMid);
+            const f2 = first.slice(fMid);
+            const l1 = last.slice(0, lMid);
+            const l2 = last.slice(lMid);
 
-        const syllableOptions = [
-            f1 + l2,
-            l1 + f2,
-            f2 + l1,
-            l2 + f1
-        ];
+            const syllableOptions = [f1 + l2, l1 + f2, f2 + l1, l2 + f1].filter(Boolean);
+            mixedFirst = syllableOptions[Math.floor(Math.random() * syllableOptions.length)] || mixedFirst;
+        }
 
-        const mixedFirst = syllableOptions[Math.floor(Math.random() * syllableOptions.length)];
-
-        // Substitui o nome principal embaralhado
+        // Substitui first pelo mix
         parts = parts.map(p => (p === first ? mixedFirst : p));
 
-        // --- PARTE 3: CHANCE DE REMOVER UMA PARTE ---
-        if (Math.random() < removeChance) {
+        // Chance de remover uma parte (se sobrar mais de 1)
+        if (Math.random() < removeChance && parts.length > 1) {
             const indexToRemove = Math.floor(Math.random() * parts.length);
             parts.splice(indexToRemove, 1);
         }
 
-        // --- PARTE 4: FORMATOS ÉPICOS ALEATÓRIOS ---
-        if (Math.random() < epicChance) {
-            const baseName = mixedFirst;
-            const surname = last;
-            const originalFirst = first;
+        return capitalizeSmart(parts.join(' '));
 
-            const epicFormats = [
-                // Name, the Title
-                () => `${baseName}, the ${title}`,
-
-                // Surname of Name
-                () => `${surname} of ${baseName}`,
-
-                // Title, Son of Name
-                () => `${title}, Son of ${originalFirst}`,
-
-                // Name the Brave / The Silent / etc.
-                () => `${baseName} the ${randomEpicWord()}`,
-
-                // Lastname the Red / the Swift etc.
-                () => `${surname} the ${randomEpicWord()}`,
-
-                // Title of the Fallen / Night / Storm
-                () => `${title} of the ${randomEpicWord()}`
-            ];
-
-            return epicFormats[Math.floor(Math.random() * epicFormats.length)]();
-        }
-
-        // Se não for épico, usa as partes embaralhadas
-        return parts.join(" ");
-
-        function randomEpicWord() {
-            const words = [
-                "Brave", "Silent", "Storm", "Night", "Red", "Radiant", "Shadow",
-                "Fallen", "Iron", "Swift", "Golden", "Ashen"
-            ];
-            return words[Math.floor(Math.random() * words.length)];
+        // -------------------------
+        // Função interna de capitalização inteligente
+        // -------------------------
+        function capitalizeSmart(str) {
+            const exceptions = ["of", "the", "son"];
+            return str
+                .split(' ')
+                .map((word, index) => {
+                    const lower = word.toLowerCase();
+                    if (index === 0) return lower.charAt(0).toUpperCase() + lower.slice(1);
+                    if (exceptions.includes(lower)) return lower;
+                    return lower.charAt(0).toUpperCase() + lower.slice(1);
+                })
+                .join(' ');
         }
     }
+
+
     _calculateModifier(weight = 1, op = '*'){
 
         //comeca fraco e escalona muito late game

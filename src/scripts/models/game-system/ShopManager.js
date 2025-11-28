@@ -3,13 +3,13 @@ function ShopManager() {
 }
 
 
-ShopManager.prototype.generateShop = function() {
+ShopManager.prototype.generateShop = async function() {
     this.shopInventory = [];
     
     // Gera 3 mercenários
     for (let i = 0; i < 3; i++) {
         // criacao do mercenario
-        const merc = MERCENARY_GENERATOR.generateMercenary();
+        const merc = await MERCENARY_GENERATOR.generateMercenary();
         
         // Calcula o preço
         // Preço = Base (50) + (Nível * 50) + (Total de Atributos * 10)

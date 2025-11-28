@@ -150,7 +150,7 @@ function removeEnemyFromSquad(enemy) {
     }
 }
 
-function spawnNewEnemies() {
+async function spawnNewEnemies() {
     window.enemyTeam = [];
     enemyArea.innerHTML = ''; 
 
@@ -160,11 +160,12 @@ function spawnNewEnemies() {
 
     for (let i = 0; i < enemyCount; i++) {
         
-        const newEnemy = ENEMY_GENERATOR.generateEnemy();
+        const newEnemy = await ENEMY_GENERATOR.generateEnemy();
         
         addEnemyFromSquad(newEnemy);
     }
 }
+
 
 // Controle de Destrancar Loja
 function checkShopAvailability() {

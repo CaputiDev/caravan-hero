@@ -3,7 +3,7 @@ function EnemyGenerator() {
     // (O construtor fica vazio, pois usamos o protótipo)
 }
 
-EnemyGenerator.prototype.generateEnemy = function() {
+EnemyGenerator.prototype.generateEnemy = async function() {
 
     const currentPhase = GAME_MANAGER.getPhase();
     const statPool = GAME_MANAGER.getEnemyStatPool();
@@ -21,22 +21,27 @@ EnemyGenerator.prototype.generateEnemy = function() {
     const attributesArray = this._distributeStatPoints(classTemplate, statPool);
     
     // Cria um nome (deverá ser puxado dinamicamente)
-    const enemyName = `${classTemplate.name}`; 
+    const enemyName = await APIConn.getName().call();
+    
+    //Cria um avatar dinamiacamente
+    const enemyAvatar = await APIConn.getAvatar().call();
     
     // Cria a nova instância do Inimigo
     const newEnemy = new Enemy(
         enemyName,
         attributesArray,
+        enemyAvatar,
         level,
         tier,
         classTemplate.description
     );
+
+    console.log(newEnemy)
     
     // (Lógica futura de Vocação)
     // if (classTemplate.vocation) {
     //     newEnemy.passive_skills.push(classTemplate.vocation);
     // }
-
     return newEnemy;
 }
 

@@ -3,11 +3,13 @@ class ConnectionAPI {
 
     constructor() {
         const base_url = 'https://randomuser.me/api/';
-        const base_query = '?noinfo';
+        const base_query = '?noinfo' + '&nat=us,gb,ca,au';
         this.query = '';
         this.fields = [];
         this.amount = 1;
         this.url = base_url + base_query;
+
+        console.log("[API] Connection API criada");
     }
 
     #resetReq() {
@@ -62,3 +64,5 @@ class ConnectionAPI {
         return this.addField("name");
     }
 }
+
+const APIConn = new ConnectionAPI();

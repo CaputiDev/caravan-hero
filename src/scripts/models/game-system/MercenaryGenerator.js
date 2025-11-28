@@ -1,7 +1,7 @@
 function MercenaryGenerator() {
 }
 
-MercenaryGenerator.prototype.generateMercenary = function() {
+MercenaryGenerator.prototype.generateMercenary = async function() {
     
     //  Define o nível base do mercenário (escala com a fase)
     const currentPhase = GAME_MANAGER.getPhase();
@@ -17,13 +17,16 @@ MercenaryGenerator.prototype.generateMercenary = function() {
     const template = MERCENARY_VOCATIONS[key];
 
     //  Escolhe um Nome aleatório(futuramente, será dinâmico)
-    const name = MERCENARY_NAMES[Math.floor(Math.random() * MERCENARY_NAMES.length)];
+    const mercenaryName = await APIConn.getName().call();
+    
+    //Cria um avatar dinamiacamente
+    const mercenaryAvatar = await APIConn.getAvatar().call();
 
     // Distribui os pontos (Mesma lógica do EnemyGenerator)
     const attributesArray = this._distributeStatPoints(template.weights, statPool);
 
     //  Cria a Instância
-    const newMerc = new PCharacter(name, attributesArray, level, tier, template.name);
+    const newMerc = new PCharacter(mercenaryName, attributesArray, mercenaryAvatar, level, tier, template.name);
 
     //  Adiciona Skills Iniciais baseadas na chave da vocação
     this._assignStartingSkills(newMerc, key);
