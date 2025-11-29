@@ -49,6 +49,8 @@ window.addEventListener('keydown', function(e) {
 startBattleButton.addEventListener('click', executeRound);
 
 playerArea.addEventListener('click', (event) => {
+
+    if (document.body.classList.contains('battle-in-progress')) return;
     
     if (BATTLE_VIEW_MANAGER.isCurrentlyTargeting()) {
         

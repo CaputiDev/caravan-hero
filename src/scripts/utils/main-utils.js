@@ -18,7 +18,7 @@ function executeRound() {
     drawTurnOrder();
     
     if (startBattleButton.disabled) return;
-    
+    document.body.classList.add('battle-in-progress');
     window.turnCombatTime = 4000 / window.combatOrder.length;
     BATTLE_MANAGER.processActions();
 }
@@ -32,6 +32,8 @@ function checkPhaseEnd() {
 
     roundNumber.textContent = GAME_MANAGER.resetRound();
     
+    document.body.classList.remove('battle-in-progress');
+
     setTimeout(() => {
             REWARD_MANAGER.showRewards();
             
@@ -64,6 +66,7 @@ function endRound(passRound = true) {
     
 
     endRoundCleanup();
+    document.body.classList.remove('battle-in-progress');
 }
 
 function endRoundCleanup() {

@@ -1,3 +1,23 @@
+body.battle-in-progress {
+    cursor: wait;
+}
+
+/* Bloqueia cliques em todas as áreas interativas */
+body.battle-in-progress #team-panel,       
+body.battle-in-progress #battlefield,      
+body.battle-in-progress #recruit-icon,     
+body.battle-in-progress #recruit-panel,    
+body.battle-in-progress .modal-panel,      
+body.battle-in-progress #start-battle-btn  
+{
+    pointer-events: none !important; /* Impede qualquer clique ou hover */
+}
+
+body.battle-in-progress .player-action-bar {
+    opacity: 0;
+    transform: translateY(20px);
+}
+
 /*animacao cards float*/
 @keyframes float {
     0% {
