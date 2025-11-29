@@ -222,19 +222,24 @@ body {
 
 .player-card {
     width: 150px;
-    height: 300px; 
+    height: 325px; /* Era 300px -> Agora 325px */
+
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    z-index: 2; 
+    
     background-color: var(--card-bg);
     border: 2px solid var(--border-color);
     border-radius: 10px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
     
-    /* Organiza o conteúdo da carta em coluna */
     display: flex;
     flex-direction: column;
-    align-items: center; /* Centraliza horizontalmente */
-    
-    padding: 8px;
-    box-sizing: border-box; /* Garante que o padding não quebre o layout */
+    align-items: center;
+
+    padding: 8px 8px 12px 8px; 
+    box-sizing: border-box;
 }
 
 /* Nome (Acima da Foto) */
@@ -269,21 +274,23 @@ body {
 .player-lvl {
     text-align: center;
     width: 100%;
-    font-size: 0.8em;
+    font-size: 0.80em; 
     font-weight: bold;
     color: #ccc;
-    margin-top: 5px;
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 /* Área de Stats (Abaixo do Level) */
 .player-stats-area {
     width: 100%;
-    margin-top: auto; /* Empurra para o final da carta */
+    margin-top: auto;
     display: flex;
     flex-direction: column;
-    gap: 4px; /* Espaço entre as barras */
+    gap: 0px; /* Um pouco mais de espaço entre as barras */
 }
-
 /* Ataque (Laranja) */
 .player-atk {
     font-size: 0.9em;
@@ -335,6 +342,7 @@ body {
     position: relative; /* CRUCIAL para sobrepor os elementos */
     overflow: hidden; /* Garante que a barra de fill não saia */
     border: 1px solid #111;
+    margin-bottom: 4px; /* Um pouco de espaço entre as barras */
 }
 
 /* Texto dentro das barras */
@@ -1225,3 +1233,34 @@ body.targeting-ally .player-card.is-targeting {
     z-index: 1000;
     pointer-events: none;
 }
+
+.combat-stats-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* 2 colunas iguais */
+    gap: 4px;
+    width: 100%;
+    margin-bottom: 6px;
+    background-color: rgba(0, 0, 0, 0.2);
+    padding: 4px;
+    border-radius: 6px;
+}
+
+.c-stat {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75em; /* Fonte pequena para caber */
+    color: #ccc;
+    white-space: nowrap; /* Não quebra linha */
+}
+
+.c-stat .icon {
+    margin-right: 3px;
+    font-size: 1.1em;
+}
+
+/* Cores específicas para destaque */
+.c-stat[title="Ataque"] { color: var(--orange-color); font-weight: bold; }
+.c-stat[title="Chance Crítica"] { color: #ffeb3b; } /* Amarelo */
+.c-stat[title="Multiplicador Crítico"] { color: #ff5722; } /* Laranja Avermelhado */
+.c-stat[title="Esquiva"] { color: #00bcd4; } /* Ciano */

@@ -100,24 +100,46 @@ function drawCrew(character) {
     const existingCard = playerArea.querySelector(`.player-card[data-id="${character.id}"]`);
 
     const newInnerCardHTML = `
-    <div class="player-action-bar">
+        <div class="player-action-bar">
             <div class="action-icon" data-action-type="melee" title="Ataque Básico">👊</div>
             <div class="action-icon" data-action-type="skill" title="Habilidades">📜</div>
             <div class="action-icon" data-action-type="rest" title="Descansar">💤</div>
         </div>
+        
         <div class="player-name">${character.name}</div>
-        <div class="player-sprite"><img src=${character.avatar.large}></div>
-        <div class="player-lvl">Lvl ${character.lvl}</div>
+        
+        <div class="player-sprite">
+            <img src="${character.avatar.large}" style="width:100%; height:100%; object-fit:cover; border-radius:4px;">
+        </div>
+        
+        <div class="player-lvl">
+            <span style="color: var(--gold-color); font-weight: bold;">T${character.tier}</span> 
+            <span style="margin: 0 5px; color: #666;">|</span> 
+            Lvl ${character.lvl}
+        </div>
+
         <div class="player-stats-area">
-            <div class="player-atk">
-                ATK: ${character.stats.damage}
+            <div class="combat-stats-grid">
+                <div class="c-stat" title="Ataque">
+                    <span class="icon">⚔️</span> ${character.stats.damage}
+                </div>
+                <div class="c-stat" title="Chance Crítica">
+                    <span class="icon">🎯</span> ${character.stats.critical_chance.toFixed(1)}%
+                </div>
+                <div class="c-stat" title="Multiplicador Crítico">
+                    <span class="icon">💥</span> ${character.stats.critical_multiplier.toFixed(1)}x
+                </div>
+                <div class="c-stat" title="Esquiva">
+                    <span class="icon">💨</span> ${Math.round(character.stats.evasion)}%
+                </div>
             </div>
+
             <div class="stat-bar-container hp-bar">
                 <div class="bar-text hp-text">
                     ${character.currentHP} / ${character.stats.hp}
                 </div>
                 <div class="armor-text">
-                    ${character.stats.armor}
+                    🛡️${character.stats.armor}
                 </div>
                 <div class="hp-bar-fill" style="width: ${(character.currentHP / character.stats.hp) * 100}%"></div>
             </div>
