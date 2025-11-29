@@ -335,8 +335,20 @@ turnOrderList.addEventListener('mousemove', (event) => {
 });
 
 teamRoster.addEventListener('click', (event) => {
+    const levelUpButton = event.target.closest('.level-up-icon');
     
-    //  Verifica se clicou no slot trancado correto
+    if (levelUpButton) {
+        const parentCard = levelUpButton.closest('.team-member-portrait');
+        const charId = parseInt(parentCard.dataset.id, 10);
+        
+        const character = window.team.find(c => c.id === charId);
+        
+        if (character) {
+            openLevelUpModal(character); 
+        }
+        return; 
+    }
+    
     const lockedSlot = event.target.closest('.locked-slot[data-action="buy-slot"]');
     
     if (lockedSlot) {

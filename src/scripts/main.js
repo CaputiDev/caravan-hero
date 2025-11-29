@@ -22,10 +22,15 @@ if(firstCharData != null){
 window.location.href = "./char_creation.html";
 }
 
-spawnNewEnemies(); 
+spawnNewEnemies().then(() => {
+    window.combatOrder = calculateCombatOrder();
+    drawTurnOrder();
+}); 
 refreshAllUI();
 checkBattleReady();
+
+
+    
 SHOP_MANAGER.generateShop().then(() => {
     drawShop();
-    executeRound();
 });
