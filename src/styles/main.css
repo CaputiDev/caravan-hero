@@ -86,37 +86,93 @@ body {
     overflow-y: auto; /* Adiciona scroll se precisar */
 }
 
-/* Slot de membro do time */
 .team-member-portrait {
     display: flex;
-    align-items: center;
+    flex-direction: column;
     background-color: var(--card-bg);
     border: 1px solid var(--border-color);
     border-radius: 5px;
     padding: 8px;
-    height: 60px; /* Altura fixa */
+    min-height: 110px; 
+    position: relative;
+    margin-bottom: 10px;
+    transition: background-color 0.2s;
 }
-
 .team-member-portrait.empty-slot {
-    background-color: rgba(0, 0, 0, 0.1);
-    border-style: dashed;
+background-color: rgba(255, 255, 255, 0.05);
+    border: 2px dashed var(--border-color);
+    justify-content: center;
+    align-items: center;
+    color: #666;
+    font-size: 0.9em;
 }
 
+.team-member-portrait.locked-slot {
+    background-color: rgba(0, 0, 0, 0.3);
+    border: 1px solid #444;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.team-member-portrait.locked-slot:hover {
+    background-color: rgba(0, 0, 0, 0.5);
+    border-color: var(--gold-color);
+}
+
+.team-member-portrait.locked-slot.confirm-state {
+    background-color: var(--card-bg); 
+    border-color: #4CAF50;
+    color: white;
+    animation: pulse 0.5s infinite;
+}
+
+.team-member-portrait.locked-slot.error-state {
+    background-color: rgba(231, 76, 60, 0.8);
+    border-color: #c0392b;
+    color: white;
+    cursor: not-allowed;
+}
+.team-member-portrait.locked-slot.confirm-state .locked-price,
+.team-member-portrait.locked-slot.error-state .locked-price {
+    color: white;
+}
+.locked-content {
+    text-align: center;
+    color: #777;
+}
+.locked-icon {
+    font-size: 1.5em;
+    margin-bottom: 5px;
+}
+
+.locked-price {
+    color: var(--gold-color);
+    font-weight: bold;
+}
 .portrait-image {
-    width: 45px;
-    height: 45px;
-    background-color: #555; /* Placeholder da foto */
-    border-radius: 50%; /* Foto redonda */
+    width: 50px;
+    height: 50px;
+    background-color: #555;
+    border-radius: 50%;
     margin-right: 10px;
+    border: 2px solid var(--border-color);
+    background-size: cover;
+    background-position: center;
+    flex-shrink: 0;
 }
 
 .portrait-info {
-    font-size: 0.9em;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
 }
 
 .portrait-name {
     font-weight: bold;
-    margin-bottom: 5px;
+    font-size: 1em;
+    color: var(--gold-color);
 }
 
 .portrait-stats {
@@ -125,8 +181,53 @@ body {
     gap: 0 10px; /* 0 de espaço vertical, 10px horizontal */
 }
 
-.portrait-hp { color: var(--hp-color); }
-.portrait-mana { color: var(--mana-color); }
+.portrait-top {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 5px;
+}
+
+/* Grid para os atributos (Str, Con, etc) */
+.portrait-attributes-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr; /* 3 colunas */
+    gap: 2px;
+    font-size: 0.75em;
+    color: #ccc;
+}
+
+/* Barra de XP */
+.portrait-xp-container {
+    width: 100%;
+    height: 14px;
+    background-color: #111;
+    border-radius: 7px;
+    position: relative;
+    overflow: hidden;
+    margin-top: 5px;
+    border: 1px solid #444;
+}
+
+.portrait-xp-fill {
+    height: 100%;
+    background-color: #9b59b6; /* Roxo para XP */
+    width: 0%;
+    transition: width 0.3s;
+}
+
+.portrait-xp-text {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    font-size: 0.7em;
+    line-height: 14px;
+    color: white;
+    font-weight: bold;
+    text-shadow: 1px 1px 2px black;
+}
 
 /* =================================
    Área Central (Batalha)
@@ -1064,10 +1165,6 @@ body.targeting-ally .player-card.is-targeting {
     transform: scale(1.1);
 }
 
-.team-member-portrait {
-    position: relative; 
-}
-
 #lvlup-points-display {
     font-size: 1.2em;
     font-weight: bold;
@@ -1150,9 +1247,9 @@ body.targeting-ally .player-card.is-targeting {
 
 /* botoes da loja */
 .recruit-btn.confirm {
-    background-color: var(--success-color);
+    background-color: green;
     color: white;
-    animation: pulse 0.5s infinite;
+    animation: pulse 0.8s infinite;
 }
 
 .recruit-btn.error {

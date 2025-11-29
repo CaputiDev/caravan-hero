@@ -335,19 +335,70 @@ turnOrderList.addEventListener('mousemove', (event) => {
 });
 
 teamRoster.addEventListener('click', (event) => {
-    const levelUpButton = event.target.closest('.level-up-icon');
     
-    if (levelUpButton) {
-        const parentCard = levelUpButton.closest('.team-member-portrait');
-        const charId = parseInt(parentCard.dataset.id, 10);
-        const character = window.team.find(c => c.id === charId);
+    //  Verifica se clicou no slot trancado correto
+    const lockedSlot = event.target.closest('.locked-slot[data-action="buy-slot"]');
+    
+    if (lockedSlot) {
+        const cost = PLAYER_MANAGER.getNextSlotCost();
         
-        if (character) {
-            openLevelUpModal(character);
+        if (lockedSlot.dataset.confirming !== 'true') {
+            
+            //  Validação de Ouro
+            if (PLAYER_MANAGER.getGold() < cost) {
+                // Salva o conteúdo original
+                const originalHTML = lockedSlot.innerHTML;
+                
+                // Aplica estilo de Erro
+                lockedSlot.classList.add('error-state');
+                lockedSlot.innerHTML = `
+                    <div class="locked-content">
+                        <div class="locked-icon">❌</div>
+                        <div>Sem Ouro!</div>
+                    </div>
+                `;
+                
+                // Remove o erro após 1 segundo
+                setTimeout(() => {
+                    lockedSlot.classList.remove('error-state');
+                    lockedSlot.innerHTML = originalHTML;
+                }, 1000);
+                return;
+            }
+
+            lockedSlot.dataset.confirming = 'true'; 
+            lockedSlot.classList.add('confirm-state');
+            
+            // Salva o HTML original num atributo data
+            lockedSlot.innerHTML = `
+                <div class="locked-content">
+                    <div class="locked-icon">✔️</div>
+                    <div>Confirmar?</div>
+                    <div class="locked-price">${cost} 💰</div>
+                </div>
+            `;
+            
+            // Reverte o estado de confirmação após 3 segundos
+            setTimeout(() => {
+                if (lockedSlot && lockedSlot.dataset.confirming === 'true') {
+                    refreshRoster(); 
+                }
+            }, 3000);
+
+            return;
+        }
+        // Segundo Clique (Executar Compra) ---
+        if (lockedSlot.dataset.confirming === 'true') {
+            const success = PLAYER_MANAGER.buySlot();
+            
+            if (success) {
+                // Atualiza UI
+                goldAmount.textContent = PLAYER_MANAGER.getGold();
+                refreshAllUI(); // Redesenha tudo
+            }
         }
     }
 });
-
 levelUpModal.addEventListener('click', (event) => {
     const plusButton = event.target.closest('.lvlup-plus-btn');
     
@@ -380,27 +431,23 @@ recruitPanel.addEventListener('click', (event) => {
     const index = parseInt(btn.dataset.index, 10);
     const merc = SHOP_MANAGER.shopInventory[index];
     if (!merc) {
-        console.error("Erro: Mercenário não encontrado.");
         return;
     }
 
-    // Verifica se o botão JÁ está no modo de confirmação (Verde)
     const isConfirming = btn.classList.contains('confirm');
 
     if (!isConfirming) {
-        // --- ESTADO 1: PRIMEIRO CLIQUE (Validação) ---
         let errorMsg = null;
         if (PLAYER_MANAGER.getGold() < merc.cost) errorMsg = "Sem Ouro!";
-        else if (window.team.length >= MAX_TEAM_SIZE) errorMsg = "Lotado!";
+        else if (window.team.length >= MAX_TEAM_SIZE || PLAYER_MANAGER.unlockedSlots <= window.team.length) errorMsg = "Time lotado!";
 
         if (errorMsg) {
             // Feedback de Erro
-            const originalText = btn.textContent; // Salva o texto original ("Contratar")
+            const originalText = 'Contratar';
             btn.textContent = errorMsg;
             btn.classList.add('error');
 
             setTimeout(() => {
-                // Restaura o estado original se der erro
                 btn.textContent = originalText;
                 btn.classList.remove('error');
             }, 1000);

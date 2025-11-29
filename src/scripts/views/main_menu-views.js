@@ -17,5 +17,5 @@ document.addEventListener("DOMContentLoaded", function() {
         //adiciona na propria pagina
         //window.location.href = "./pages/credits.html";
     });
- 
+
 });

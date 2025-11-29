@@ -30,7 +30,7 @@ ShopManager.prototype.buyMercenary = function(index) {
         return false;
     }
 
-    if (window.team.length >= MAX_TEAM_SIZE) {
+    if (window.team.length >= MAX_TEAM_SIZE || PLAYER_MANAGER.unlockedSlots <= window.team.length) {
         console.warn("Time cheio!");
         return false;
     }

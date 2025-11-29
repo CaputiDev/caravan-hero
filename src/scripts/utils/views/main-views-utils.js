@@ -3,6 +3,7 @@
 
 function refreshAllUI() {
     drawRoster();
+    goldAmount.textContent = PLAYER_MANAGER.getGold();
     window.team.forEach(character => {
         updateSquad(character);
     });
@@ -12,43 +13,89 @@ function refreshAllUI() {
     })
 }
 function refreshRoster() {
-
+    // Limpa o roster antigo
     teamRoster.innerHTML = '';
 
-    window.team.forEach(character => {
-        let levelUpIconHTML = '';
-        if (character.unspentAttributePoints > 0) {
-        levelUpIconHTML = `<div class="level-up-icon" title="Pontos disponíveis!">+</div>`;
-        }   
-        const newPortraitHTML = `
-        <div class="portrait-image"></div>
-        <div class="portrait-info">
-            <span class="portrait-name">${character.name}</span>
-            <div class="portrait-stats">
-                <span class="portrait-atk">⚔️ ${character.currentHP}</span>
-                <span class="portrait-hp">❤️ ${character.currentHP}/${character.stats.hp}</span>
-                <span class="portrait-mana">🌀 ${character.currentMana}/${character.stats.mana}</span>
-            </div>
-        </div>
-        ${levelUpIconHTML} `;
-        
+    // Itera sobre TODOS os slots possíveis (1 até 6)
+    const maxSlots = PLAYER_MANAGER.maxSlots; // (6)
+    
+    for (let i = 0; i < maxSlots; i++) {
         const slot = document.createElement('div');
-        slot.classList.add('team-member-portrait'); 
-        slot.dataset.id = character.id; 
-        slot.innerHTML = newPortraitHTML; 
         
-        teamRoster.appendChild(slot);
-    });
+        //Slot tem um Personagem ---
+        if (i < window.team.length) {
+            const character = window.team[i];
+            slot.classList.add('team-member-portrait');
+            slot.dataset.id = character.id;
+            
+            // Lógica do ícone de level up
+            let levelUpIconHTML = '';
+            if (character.unspentAttributePoints > 0) {
+                levelUpIconHTML = `<div class="level-up-icon" title="Pontos disponíveis!">+</div>`;
+            }
 
-    const emptySlotsToDraw = MAX_TEAM_SIZE - window.team.length;
-    for (let i = 0; i < emptySlotsToDraw; i++) {
-        const slot = document.createElement('div');
-        slot.classList.add('team-member-portrait', 'empty-slot');
-        slot.setAttribute('disabled', '');
+            // Lógica da imagem (com fallback)
+            const avatarStyle = character.avatar.large ? `background-image: url('${character.avatar.large}');` : '';
+
+            // HTML Detalhado
+            slot.innerHTML = `
+                <div class="portrait-top">
+                    <div class="portrait-image" style="${avatarStyle}"></div>
+                    <div class="portrait-info">
+                        <span class="portrait-name">${character.name} (Nv.${character.lvl})</span>
+                        <div class="portrait-attributes-grid">
+                            <span>STR: ${character.attributes.str}</span>
+                            <span>CON: ${character.attributes.con}</span>
+                            <span>AGI: ${character.attributes.agi}</span>
+                            <span>INT: ${character.attributes.int}</span>
+                            <span>WIS: ${character.attributes.wis}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="portrait-xp-container" title="Experiência">
+                    <div class="portrait-xp-fill" style="width: ${(character.experience / character.experienceGap) * 100}%"></div>
+                    <span class="portrait-xp-text">${character.experience} / ${character.experienceGap} XP</span>
+                </div>
+                
+                ${levelUpIconHTML}
+            `;
+        }
+        
+        //Slot Vazio ---
+        else if (i < PLAYER_MANAGER.unlockedSlots) {
+            slot.classList.add('team-member-portrait', 'empty-slot');
+            slot.innerHTML = `<div>Espaço Livre</div>`;
+        }
+
+        //Slot Trancado ---
+        else {
+            slot.classList.add('team-member-portrait', 'locked-slot');
+
+
+            if (i === PLAYER_MANAGER.unlockedSlots) {
+                const cost = PLAYER_MANAGER.getNextSlotCost();
+                slot.dataset.action = 'buy-slot'; 
+                slot.innerHTML = `
+                    <div class="locked-content">
+                        <div class="locked-icon">🔒</div>
+                        <div>Destrancar</div>
+                        <div class="locked-price">${cost} 💰</div>
+                    </div>
+                `;
+            } else {
+                // Slots futuros (apenas trancados, sem preço)
+                slot.innerHTML = `<div class="locked-content"><div class="locked-icon">🔒</div></div>`;
+                slot.style.opacity = "0.5";
+                slot.style.cursor = "default";
+            }
+        }
+
         teamRoster.appendChild(slot);
     }
 
-    teamPanelTitle.textContent = `Esquadrão (${window.team.length}/${MAX_TEAM_SIZE})`;
+    // Atualiza o título
+    teamPanelTitle.textContent = `Esquadrão (${window.team.length}/${PLAYER_MANAGER.unlockedSlots})`;
 }
 function drawRoster(character) {
     refreshRoster();
