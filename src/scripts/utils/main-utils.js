@@ -181,4 +181,71 @@ async function spawnNewEnemies() {
     }
 }
 
+// valida avatar unico
+async function getUniqueAvatar() {
+    let finalAvatarObj = null;
+    let attempts = 0;
+    const MAX_ATTEMPTS = 5;
 
+    // Coleta TODAS as URLs (strings) usadas no momento para comparação
+    const usedUrlSet = new Set();
+
+    const addToSet = (list) => {
+        if (!list || !Array.isArray(list)) return;
+        
+        list.forEach(char => {
+            // Verifica se o personagem tem avatar e extrai a URL 'large' para comparação
+            if (char.avatar) {
+                // Se for objeto { large: '...' }
+                if (char.avatar.large) usedUrlSet.add(char.avatar.large);
+                // Se for string direta 'http...'
+                else if (typeof char.avatar === 'string') usedUrlSet.add(char.avatar);
+            }
+        });
+    };
+
+    // Popula a lista de proibidos
+    addToSet(window.team);
+    addToSet(window.enemyTeam);
+    if (typeof SHOP_MANAGER !== 'undefined' && SHOP_MANAGER.shopInventory) {
+        addToSet(SHOP_MANAGER.shopInventory);
+    }
+
+    // Loop de Tentativa e Erro
+    while (finalAvatarObj === null && attempts < MAX_ATTEMPTS) {
+        attempts++;
+        try {
+
+            // O ConnectionAPI original retorna o objeto do usuário inteiro
+            const data = await APIConn.getAvatar().call(); 
+            
+            // Normaliza em um único objeto (caso venha array)
+            const resultObj = Array.isArray(data) ? data[0] : data;
+
+            if (resultObj && resultObj.picture) {
+                const candidateUrl = resultObj.picture.large;
+
+                if (!usedUrlSet.has(candidateUrl)) {
+                    // É único, Sucesso.
+                    finalAvatarObj = resultObj.picture; 
+                } else {
+                    console.warn(`[Avatar] Repetido encontrado (Tentativa ${attempts}). Buscando outro...`);
+                }
+            }
+        } catch (error) {
+            console.warn(`[Avatar] Erro na API (Tentativa ${attempts}).`, error);
+        }
+    }
+
+    // 3. Fallback (Se falhar 5x ou a internet cair)
+    if (!finalAvatarObj) {
+        console.error("[Avatar] Falha total. Usando placeholder.");
+        finalAvatarObj = {
+            large: "https://randomuser.me/api/portraits/lego/1.jpg",
+            medium: "https://randomuser.me/api/portraits/lego/1.jpg",
+            thumbnail: "https://randomuser.me/api/portraits/lego/1.jpg"
+        };
+    }
+
+    return finalAvatarObj;
+}

@@ -35,7 +35,7 @@ EnemyGenerator.prototype.generateEnemy = async function() {
     const enemyName = await APIConn.getName().call();
     
     //Cria um avatar dinamiacamente
-    const enemyAvatar = await APIConn.getAvatar().call();
+    const enemyAvatar = await getUniqueAvatar();
     
     // Cria a nova instância do Inimigo
     const newEnemy = new Enemy(

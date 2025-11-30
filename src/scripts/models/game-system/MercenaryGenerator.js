@@ -19,7 +19,7 @@ MercenaryGenerator.prototype.generateMercenary = async function() {
     const mercenaryName = await APIConn.getName().call();
     
     //Cria um avatar dinamiacamente
-    const mercenaryAvatar = await APIConn.getAvatar().call();
+    const mercenaryAvatar = await getUniqueAvatar();
 
     // Distribui os pontos 
     const attributesArray = this._distributeStatPoints(template.weights, statPool);
