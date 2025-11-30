@@ -4,7 +4,6 @@ function ShopManager() {
 
 
 ShopManager.prototype.generateShop = async function() {
-    console.log('xuxa');
     
     this.shopInventory = [];
     

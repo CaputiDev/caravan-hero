@@ -1,7 +1,3 @@
-const MERCENARY_NAMES = [
-    "Alaric", "Borg", "Caelum", "Darius", "Elara", 
-    "Fae", "Grom", "Hela", "Ivor", "Jinx", "Kael", "Lyra"
-];
 
 const MERCENARY_VOCATIONS = {
     'guerreiro': {

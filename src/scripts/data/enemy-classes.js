@@ -3,7 +3,7 @@ const ENEMY_CLASS_TEMPLATES = {
         name: "Aventureiro",
         description: "Um inimigo equilibrado, mas sem especialidades.",
         // Pesos iguais: distribui os pontos aleatoriamente
-        weights: { str: 1, con: 1, agi: 1, int: 0, wis: 1 }, 
+        weights: { str: 0, con: 0, agi: 0, int: 0, wis: 0 }, 
         // Vocation: null (ou uma passiva simples)
     },
     'combatente': {

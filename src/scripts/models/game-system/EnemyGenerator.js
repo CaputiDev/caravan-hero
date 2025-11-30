@@ -4,23 +4,34 @@ function EnemyGenerator() {
 }
 
 EnemyGenerator.prototype.generateEnemy = async function() {
-
-    const currentPhase = GAME_MANAGER.getPhase();
-    const statPool = GAME_MANAGER.getEnemyStatPool();
-
-    const { level, tier } = this._calculateLevelAndTier(currentPhase);
-
-    // Calcula Lvl e Tier
     
-    // Escolhe aleatoriamente uma Classe inimiga
+    const currentPhase = GAME_MANAGER.getPhase();
+    let { level , tier } = this._calculateLevelAndTier(currentPhase);
+
+    const statPool = 5 + Math.floor(level / 2); 
+
     const classKeys = Object.keys(ENEMY_CLASS_TEMPLATES);
+    
+    //balanceamento dos inimigos por fase
+    if(currentPhase < 5){
+
+        // Nos primeiros 5 níveis, evita classes suporte
+        classKeys.splice(classKeys.indexOf('feiticeiro'), 1);
+        classKeys.splice(classKeys.indexOf('sabio'), 1);
+
+        level = currentPhase > 1 ? currentPhase -1 : currentPhase;
+    }
+    if(currentPhase > 10){
+        
+        //niveis mais altos, evita aventureiro
+
+        classKeys.splice(classKeys.indexOf('aventureiro'), 1);
+    }
     const randomClassKey = classKeys[Math.floor(Math.random() * classKeys.length)];
     const classTemplate = ENEMY_CLASS_TEMPLATES[randomClassKey];
 
-    // distribui os pontos
     const attributesArray = this._distributeStatPoints(classTemplate, statPool);
     
-    // Cria um nome (deverá ser puxado dinamicamente)
     const enemyName = await APIConn.getName().call();
     
     //Cria um avatar dinamiacamente
@@ -36,12 +47,9 @@ EnemyGenerator.prototype.generateEnemy = async function() {
         classTemplate.description
     );
 
-    console.log(newEnemy)
     
-    // (Lógica futura de Vocação)
-    // if (classTemplate.vocation) {
-    //     newEnemy.passive_skills.push(classTemplate.vocation);
-    // }
+    console.log(newEnemy);
+    
     return newEnemy;
 }
 
