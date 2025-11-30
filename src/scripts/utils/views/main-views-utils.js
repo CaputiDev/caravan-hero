@@ -438,7 +438,6 @@ function animate(attackResult, targetCard){
         }
     }, 500);
 }
-const recruitContent = document.querySelector('#recruit-panel .panel-content');
 
 function drawShop() {
     recruitContent.innerHTML = ''; 

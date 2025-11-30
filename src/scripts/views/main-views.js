@@ -20,6 +20,7 @@ const combatTextPopup = document.getElementById('combat-text-popup');
 const levelUpModal = document.getElementById('level-up-modal');
 let activeLevelUpCharacter = null;
 let skillPopupTimeout = null;
+const recruitContent = document.querySelector('#recruit-panel .panel-content');
 
 window.team = [];
 window.enemyTeam = [];
@@ -211,7 +212,7 @@ recruitIcon.addEventListener('click', () => {
 });
 
 
-// Fechar Painéis (Recrutar ou Habilidades)
+// Fechar Painéis
 closeButtons.forEach(button => {
     button.addEventListener('click', () => {
         const panelId = button.dataset.targetPanel;
@@ -489,7 +490,6 @@ recruitPanel.addEventListener('click', (event) => {
 
         // O código TERMINA aqui. O usuário precisa clicar de novo.
     } else {
-        // --- ESTADO 2: SEGUNDO CLIQUE (Compra) ---
         // Limpa timer de confirmação, se houver
         if (btn.dataset.confirmTimer) {
             clearTimeout(Number(btn.dataset.confirmTimer));

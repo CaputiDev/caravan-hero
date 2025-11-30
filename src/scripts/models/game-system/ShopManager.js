@@ -4,6 +4,8 @@ function ShopManager() {
 
 
 ShopManager.prototype.generateShop = async function() {
+    console.log('xuxa');
+    
     this.shopInventory = [];
     
     // Gera 3 mercenários

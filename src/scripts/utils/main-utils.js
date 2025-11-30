@@ -32,12 +32,19 @@ function checkPhaseEnd() {
 
     roundNumber.textContent = GAME_MANAGER.resetRound();
     
-    document.body.classList.remove('battle-in-progress');
 
     setTimeout(() => {
             REWARD_MANAGER.showRewards();
             
             endRoundCleanup(); 
+
+        }, 500);
+
+    setTimeout(() => {
+        
+        document.body.classList.remove('battle-in-progress');
+        checkShopAvailability();
+        
         }, 1000);
 }
 
@@ -183,10 +190,9 @@ function checkShopAvailability() {
         recruitIcon.removeAttribute('data-tooltip'); // Remove o tooltip de bloqueio
         recruitIcon.title = "Abrir Loja"; // Tooltip nativo simples quando aberta
         
-        // Gera nova loja e avisa (apenas na primeira vez que abre na fase)
-        // (Você pode adicionar uma flag para não gerar toda hora se quiser)
-        SHOP_MANAGER.generateShop();
+        SHOP_MANAGER.generateShop().then(() => {
         drawShop();
+        });
         
     } else {
 

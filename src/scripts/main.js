@@ -29,8 +29,4 @@ spawnNewEnemies().then(() => {
 refreshAllUI();
 checkBattleReady();
 
-
-    
-SHOP_MANAGER.generateShop().then(() => {
-    drawShop();
-});
+checkShopAvailability();

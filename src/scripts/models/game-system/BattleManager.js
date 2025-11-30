@@ -34,8 +34,6 @@ BattleManager.prototype.processActions = async function(){
     //se inimigos estao derrotados, comeca outra fase
     const aliveEnemies = window.enemyTeam.filter(enemy => enemy.currentHP > 0);
     if (aliveEnemies.length === 0) {
-        await wait(500);
-        endRound();
         checkPhaseEnd(); 
     } else {
         endRound();

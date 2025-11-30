@@ -21,7 +21,6 @@ const minusButtons = document.querySelectorAll('.stat-btn.minus');
 const attributeRows = document.querySelectorAll('#char-stats-list .char-stats');
 const centralBox = document.getElementById('central-box');
 
-
 const previewStatElements = {
     damage: document.getElementById('prev-damage'),
     critical_multiplier: document.getElementById('prev-critical_multiplier'),
