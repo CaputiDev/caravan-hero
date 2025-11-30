@@ -24,18 +24,14 @@ function executeRound() {
 }
 
 function checkPhaseEnd() {
-    console.log("%c--- FASE CONCLUÍDA! ---", "color: #ffd700; font-size: 1.2em;");
-    
     phaseNumber.textContent = GAME_MANAGER.passPhase();
     
     refreshAllUI(); 
 
-    roundNumber.textContent = GAME_MANAGER.resetRound();
-    
+        roundNumber.textContent = `${GAME_MANAGER.resetRound()} : Preparação`;
 
     setTimeout(() => {
             REWARD_MANAGER.showRewards();
-            
             endRoundCleanup(); 
 
         }, 500);
@@ -43,7 +39,6 @@ function checkPhaseEnd() {
     setTimeout(() => {
         
         document.body.classList.remove('battle-in-progress');
-        checkShopAvailability();
         
         }, 1000);
 }
@@ -63,7 +58,6 @@ function calculateCombatOrder() {
 }
 
 function endRound(passRound = true) {
-    console.log("--- Fim do Round ---");
 
     BATTLE_MANAGER.processAllEffects();
 
@@ -73,6 +67,8 @@ function endRound(passRound = true) {
     
 
     endRoundCleanup();
+    checkShopAvailability();
+    drawRoster();
     document.body.classList.remove('battle-in-progress');
 }
 
@@ -92,6 +88,7 @@ function endRoundCleanup() {
     
     checkBattleReady();
 }
+
 //squad
 function addCharToSquad(character) {
     if(character instanceof PCharacter === false)return;
@@ -181,9 +178,12 @@ async function spawnNewEnemies() {
 // Controle de Destrancar Loja
 function checkShopAvailability() {
     const currentPhase = GAME_MANAGER.getPhase();
-    
+    const currentRound = GAME_MANAGER.getRound();
+
     // Destranca a cada 5 fases (5, 10, 15...)
-    if (currentPhase % 5 === 0) {
+    const isShopPhase = currentPhase % 5 === 0;
+
+    if (isShopPhase && currentRound === 1) {
 
         // LOJA ABERTA
         recruitIcon.classList.remove('locked');

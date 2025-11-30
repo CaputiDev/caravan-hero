@@ -6,7 +6,6 @@ function GameManager(){
     this.enemiesNum =1;
     this.enemiesNumValidation = 10;
 
-
     this.baseEnemyStatPool = 1;
 }
 

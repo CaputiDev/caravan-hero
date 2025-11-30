@@ -30,7 +30,9 @@ function refreshRoster() {
             
             // Lógica do ícone de level up
             let levelUpIconHTML = '';
-            if (character.unspentAttributePoints > 0) {
+            
+            // Só mostra o botão se tiver pontos E for o Round 1 (Preparação)
+            if (character.unspentAttributePoints > 0 && GAME_MANAGER.getRound() === 1) {
                 levelUpIconHTML = `<div class="level-up-icon" title="Pontos disponíveis!">+</div>`;
             }
 
