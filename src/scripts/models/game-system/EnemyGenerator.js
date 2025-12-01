@@ -44,7 +44,8 @@ EnemyGenerator.prototype.generateEnemy = async function() {
         enemyAvatar,
         level,
         tier,
-        classTemplate.description
+        classTemplate.description,
+        classTemplate.name        
     );
 
     
