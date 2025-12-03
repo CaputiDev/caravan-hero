@@ -8,21 +8,42 @@
     <script src="./src/scripts/views/main_menu-views.js" defer></script>
 </head>
 <body>
-    <div class="background-animation">
-        <span></span><span></span><span></span><span></span>
-    </div>
 
     <div id="central-box">
         <div id="logo">
             <img src="./src/styles/img/logo.png" alt="Logo do Jogo" id="game-logo">
         </div>
-        <div class="navigation-buttons">
+
+        <div id="main-nav" class="menu-section">
             <button id="start-btn" class="nav-btn">Jogar</button>
             <button id="settings-btn" class="nav-btn">Configurações</button>
             <button id="credits-btn" class="nav-btn">Créditos</button>
+        </div>
 
+        <div id="settings-section" class="menu-section hidden">
+            <h2>Configurações</h2>
+            <p class="warning-text">Cuidado: Isso apagará seu save atual.</p>
+            <button id="reset-save-btn" class="nav-btn btn-danger">Apagar Progresso</button>
+            <button class="nav-btn back-btn" data-target="settings-section">Voltar</button>
+        </div>
+
+        <div id="credits-section" class="menu-section hidden">
+            <h2>Desenvolvedores</h2>
+            <div class="devs-container">
+                <div class="dev-card">
+                    <img src="https://github.com/CaputiDev.png" alt="Thiago Caputi" class="dev-avatar">
+                    <span class="dev-name">Thiago Caputi</span>
+                    <a href="https://github.com/CaputiDev" target="_blank" class="github-link">@CaputiDev</a>
+                </div>
+
+                <div class="dev-card">
+                    <img src="https://github.com/Zarizu.png" alt="Vitor Carneiro" class="dev-avatar">
+                    <span class="dev-name">Vitor Carneiro</span>
+                    <a href="https://github.com/Zarizu" target="_blank" class="github-link">@Zarizu</a>
+                </div>
+            </div>
+            <button class="nav-btn back-btn" data-target="credits-section">Voltar</button>
         </div>
     </div>
-
 </body>
 </html>
