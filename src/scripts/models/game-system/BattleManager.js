@@ -191,13 +191,11 @@ BattleManager.prototype.processAllEffects = function(){
             }
             
             if (character.currentHP <= 0 && hpBefore > 0) {
-                console.log(`[Efeito] ${character.name} foi morto por ${effect.name}!`);
                 
                 const caster = window.team.find(c => c.id === effect.casterId);
                 
                 if (caster && caster instanceof PCharacter && character.xpGiven) {
                     caster.gainExperience(character.xpGiven);
-                    console.log(`%c[XP] ${caster.name} ganhou ${character.xpGiven} XP por matar ${character.name}!`, "color: yellow;");
                 }
                 
                 playDeathAnimation(combatantCard, () => {

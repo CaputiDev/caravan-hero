@@ -80,7 +80,6 @@ ApplyEffectSkill.prototype = Object.create(Skill.prototype);
 ApplyEffectSkill.prototype.constructor = ApplyEffectSkill;
 
 ApplyEffectSkill.prototype.execute = function(caster, target) {
-    console.log(`%c[SKILL] ${caster.name} usa ${this.name} em ${target.name}!`, "color: #3498db;");
     
     this.effectToApply.applyEffect(caster, target, this.duration);
 

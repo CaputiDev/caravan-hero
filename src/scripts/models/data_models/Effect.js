@@ -53,12 +53,10 @@ Effect.prototype.applyEffect = function(caster, target, duration) {
             }
             
             target.effects[existingEffectIndex] = newInstance;
-            console.log(`[Efeito] ${newInstance.name} (mais forte) substituiu o antigo.`);
         
         } else {
             existingEffect.duration = duration;
             existingEffect.casterId = caster.id; // Atualiza o "dono"
-            console.log(`[Efeito] ${existingEffect.name} teve a duração renovada (o novo não era mais forte).`);
         }
         return;
     }
@@ -104,7 +102,6 @@ DamageOverTimeEffect.prototype.onApply = function(caster, target){
 
 // override de método
 DamageOverTimeEffect.prototype.onTick = function(target) {
-    console.log(`[Efeito] ${target.name} sofre ${this.damagePerTick} de dano de ${this.name}!`);
     if(target.currentHP <= this.damagePerTick){ this.currentHP = 0; return};     
     target.currentHP -= this.damagePerTick;
 
@@ -122,7 +119,6 @@ StatBuffEffect.prototype = Object.create(Effect.prototype);
 StatBuffEffect.prototype.constructor = StatBuffEffect;
 
 StatBuffEffect.prototype.onApply = function(caster, target) {
-    console.log(`%c[Efeito] ${target.name} ganha ${this.amount} de ${this.statToBuff}!`, "color: #4CAF50;");
     
     if (target.stats[this.statToBuff] !== undefined) {
         target.stats[this.statToBuff] += this.amount;
@@ -137,8 +133,6 @@ StatBuffEffect.prototype.onApply = function(caster, target) {
 }
 
 StatBuffEffect.prototype.onRemove = function(caster, target) {
-    console.log(`%c[Efeito] ${target.name} perde ${this.amount} de ${this.statToBuff}!`, "color: #4CAF50;");
-    
     if (target.stats[this.statToBuff] !== undefined) {
 
         target.recalculateAll();
@@ -171,7 +165,6 @@ HealOverTimeEffect.prototype.onApply= function(caster, target){
     this.power = this.healPerTick;
 }
 HealOverTimeEffect.prototype.onTick = function(target) {
-    console.log(`%c[Efeito] ${target.name} recupera ${this.healPerTick} de HP de ${this.name}!`, "color: #4CAF50;");
     
     target.currentHP += this.healPerTick;
 

@@ -8,8 +8,6 @@ class ConnectionAPI {
         this.fields = [];
         this.amount = 1;
         this.url = base_url + base_query;
-
-        console.log("[API] Connection API criada");
     }
 
     #resetReq() {

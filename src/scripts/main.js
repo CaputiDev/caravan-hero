@@ -15,7 +15,6 @@ if(firstCharData != null){
     );
     
     addCharToSquad(firstChar);
-    console.log("Personagem carregado:", firstChar);
     
 } else {
 //caso o acesso seja feito sem a criação de um personagem, redireciona para a página de criação

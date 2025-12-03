@@ -48,9 +48,6 @@ EnemyGenerator.prototype.generateEnemy = async function() {
         classTemplate.name,
         classTemplate.icon,   
     );
-
-    
-    console.log(newEnemy);
     
     return newEnemy;
 }

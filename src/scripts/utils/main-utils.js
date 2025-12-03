@@ -171,8 +171,6 @@ async function spawnNewEnemies() {
 
     const enemyCount = ENEMY_GENERATOR.calculateNumberOfEnemies(); 
 
-    console.log(`Fase ${GAME_MANAGER.getPhase()}. Spawning ${enemyCount} inimigos...`);
-
     for (let i = 0; i < enemyCount; i++) {
         
         const newEnemy = await ENEMY_GENERATOR.generateEnemy();

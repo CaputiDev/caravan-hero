@@ -107,8 +107,6 @@ function openLevelUpModal(character) {
     if (!character) return;
     
     activeLevelUpCharacter = character;
-
-    console.log(activeLevelUpCharacter);
     
     document.getElementById('lvlup-char-name').textContent = character.name;
     document.getElementById('lvlup-points-value').textContent = character.unspentAttributePoints;

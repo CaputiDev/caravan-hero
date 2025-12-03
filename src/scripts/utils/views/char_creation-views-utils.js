@@ -73,7 +73,6 @@ avatarRandomBtn.addEventListener('click', () => {
         localStorage.setItem(PLAYER_AVATAR_OBJ, JSON.stringify(pictureObj));
 
         const pic = data.picture.large;
-        console.log("Avatar URL:", pic);
 
         avatarPreview.style.backgroundImage = `url(${pic})`;
         avatarPreview.style.backgroundSize = "cover";

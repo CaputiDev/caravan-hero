@@ -59,7 +59,6 @@ RewardManager.prototype.generateRandomReward = function() {
             effect: () => {
                 PLAYER_MANAGER.addGold(amount);
                 goldAmount.textContent = PLAYER_MANAGER.getGold();
-                console.log(`Recompensa: Ganhou ${amount} ouro.`);
             }
         };
     }

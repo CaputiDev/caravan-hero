@@ -30,7 +30,6 @@ class PCharacter extends Character {
         if (this.lvl >= this.levelCap) return; // Nível máximo
 
         this.experience += amount;
-        console.log(`[PCHARACTER]${this.name} ganhou ${amount} de EXP! (${this.experience}/${this.experienceGap})`);
 
         // Verifica se upou
         while (this.experience >= this.experienceGap) {
@@ -67,17 +66,13 @@ class PCharacter extends Character {
         if (this.currentHP > this.stats.hp) this.currentHP = this.stats.hp;
         if (this.currentMana > this.stats.mana) this.currentMana = this.stats.mana;
 
-        console.log(`%c${this.name} subiu para o NÍVEL ${this.lvl}!`, "color: #ffd700; font-weight: bold;");
-
         if (this.lvl % 2 === 0) { // A cada 2 níveis (2, 4, 6, 8, 10...)
             this.unspentAttributePoints++;
-            console.log(`[PCHARACTER]${this.name} ganhou +1 Ponto de Atributo! (Total: ${this.unspentAttributePoints})`, "color: #4CAF50;");
         }
 
         //Checa se atingiu o nível máximo
         if (this.lvl === this.levelCap) {
             this.canRebirth = true;
-            console.log(`[PCHARACTER]${this.name} atingiu o Nível Máximo! Pronto para o REBIRTH!`, "color: #007bff; font-size: 1.2em;");
         }
 
         return this.lvl;
@@ -85,7 +80,6 @@ class PCharacter extends Character {
 
     rebirth() {
         if (!this.canRebirth) {
-            console.warn(`${this.name} tentou dar Rebirth, mas não está no nível máximo!`);
             return false;
         }
 
@@ -111,12 +105,10 @@ class PCharacter extends Character {
 
     spendAttributePoint(statName) {
         if (this.unspentAttributePoints <= 0) {
-            console.warn(`[PCHARACTER]${this.name} não tem pontos para gastar!`);
             return false;
         }
         
         if (this.attributes[statName] === undefined) {
-            console.error(`[PCHARACTER]Atributo '${statName}' não existe!`);
             return false;
         }
 
@@ -132,7 +124,6 @@ class PCharacter extends Character {
         this.currentHP = oldHP;
         this.currentMana = oldMana;
         
-        console.log(`[PCHARACTER]${this.name} aumentou ${statName.toUpperCase()}! (Pontos restantes: ${this.unspentAttributePoints})`, "color: #4CAF50;");
         return true;
     }
 
