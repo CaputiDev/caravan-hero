@@ -1,3 +1,10 @@
+/* =================================
+   Main Game - Visual Update (RPG Style)
+==================================== */
+
+/* --- Importando Fontes de RPG (Google Fonts) --- */
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Lato:wght@400;700&display=swap');
+
 body.battle-in-progress {
     cursor: wait;
 }
@@ -45,7 +52,8 @@ body.battle-in-progress .player-action-bar {
     100% {
         transform: translateY(0);
     }
-    }
+}
+
 /* =================================
     Configurações Globais e Layout
 ==================================== */
@@ -65,25 +73,39 @@ body.battle-in-progress .player-action-bar {
 }
 
 :root {
+    /* Cores atualizadas baseadas no Char Creation */
+    --blue-decals: #3b82f6;
 
-    --blue-decals: rgb(12, 120, 192);
+    /* Backgrounds e Paineis (Tema Dark/Slate) */
+    --bg-color: #020617; 
+    --panel-bg: rgba(15, 23, 42, 0.95); /* Quase opaco para legibilidade */
+    --card-bg: rgba(30, 41, 59, 0.9);
+    
+    /* Bordas e Glows */
+    --border-color: #3b82f6;
+    --enemy-shadow-color: #1e293b; /* Ajustado para slate escuro */
 
-    --bg-color: #1a1a2e;
-    --panel-bg: #16213e;
-    --card-bg: #2a3a5e;
-    --border-color: #0f3460;
-    --text-color: #e9e9e9;
-    --hp-color: #e74c3c;
-    --mana-color: #3498db;
-    --gold-color: #f1c40f;
-    --orange-color: #f39c12;
-    --enemy-color: #712f26;
-    --enemy-shadow-color: #464646;
+    /* Textos */
+    --text-color: #e2e8f0;
+    --light-text-color: #f1f5f9;
+    --dark-text-color: #0f172a;
+
+    /* Status e Ações */
+    --hp-color: #ef4444;       /* Vermelho RPG */
+    --mana-color: #3b82f6;     /* Azul RPG */
+    --gold-color: #fbbf24;     /* Ouro RPG */
+    --orange-color: #f97316;   /* Laranja ajustado */
+    
+    --enemy-color: #991b1b;    /* Vermelho sangue escuro */
+    
+    --success-color: #10b981;
 }
 
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Lato', sans-serif; /* Fonte base atualizada */
     background-color: var(--bg-color);
+    /* Opcional: Adicionar um gradiente sutil de fundo para combinar com a criação */
+    background-image: radial-gradient(circle at center, #1e293b 0%, #020617 100%);
     color: var(--text-color);
     margin: 0;
     padding: 0;
@@ -98,19 +120,25 @@ body {
 #team-panel {
     width: 250px;
     background-color: var(--panel-bg);
-    border-right: 2px solid var(--border-color);
+    border-right: 1px solid var(--border-color); /* Borda mais fina e azul */
     display: flex;
     flex-direction: column;
     height: 100%;
+    box-shadow: 5px 0 15px rgba(0, 0, 0, 0.5);
 }
 
 .panel-title {
+    font-family: 'Cinzel', serif; /* Fonte Épica */
     font-size: 1.2em;
-    font-weight: bold;
+    font-weight: 700;
     text-align: center;
     padding: 15px;
-    background-color: rgba(0, 0, 0, 0.2);
-    border-bottom: 2px solid var(--border-color);
+    background-color: rgba(0, 0, 0, 0.3);
+    border-bottom: 1px solid var(--border-color);
+    color: var(--gold-color);
+    text-shadow: 0 0 5px rgba(251, 191, 36, 0.4);
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
 #team-roster {
@@ -122,50 +150,70 @@ body {
     overflow-y: auto; /* Adiciona scroll se precisar */
 }
 
+/* Scrollbar personalizada para combinar */
+#team-roster::-webkit-scrollbar {
+    width: 6px;
+}
+#team-roster::-webkit-scrollbar-track {
+    background: #0f172a;
+}
+#team-roster::-webkit-scrollbar-thumb {
+    background: #334155;
+    border-radius: 3px;
+}
+
 .team-member-portrait {
     display: flex;
     flex-direction: column;
     background-color: var(--card-bg);
-    border: 1px solid var(--border-color);
-    border-radius: 5px;
+    border: 1px solid rgba(59, 130, 246, 0.3);
+    border-radius: 8px; /* Bordas mais arredondadas */
     padding: 8px;
     min-height: 110px; 
     position: relative;
     margin-bottom: 10px;
-    transition: background-color 0.2s;
+    transition: all 0.2s;
+    box-shadow: inset 0 0 20px rgba(0,0,0,0.2);
 }
+
+.team-member-portrait:hover {
+    border-color: var(--gold-color);
+    box-shadow: 0 0 10px rgba(251, 191, 36, 0.2);
+}
+
 .team-member-portrait.empty-slot {
-background-color: rgba(255, 255, 255, 0.05);
-    border: 2px dashed var(--border-color);
+    background-color: rgba(255, 255, 255, 0.02);
+    border: 2px dashed rgba(59, 130, 246, 0.3);
     justify-content: center;
     align-items: center;
-    color: #666;
+    color: #64748b;
     font-size: 0.9em;
+    font-family: 'Cinzel', serif;
 }
 
 .team-member-portrait.locked-slot {
-    background-color: rgba(0, 0, 0, 0.3);
-    border: 1px solid #444;
+    background-color: rgba(0, 0, 0, 0.4);
+    border: 1px solid #334155;
     justify-content: center;
     align-items: center;
     cursor: pointer;
     transition: all 0.2s;
 }
 .team-member-portrait.locked-slot:hover {
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(0, 0, 0, 0.6);
     border-color: var(--gold-color);
 }
 
 .team-member-portrait.locked-slot.confirm-state {
-    background-color: var(--card-bg); 
-    border-color: #4CAF50;
+    background-color: rgba(16, 185, 129, 0.1); 
+    border-color: var(--success-color);
     color: white;
     animation: pulse 0.5s infinite;
 }
 
 .team-member-portrait.locked-slot.error-state {
-    background-color: rgba(231, 76, 60, 0.8);
-    border-color: #c0392b;
+    background-color: rgba(239, 68, 68, 0.1);
+    border-color: var(--hp-color);
     color: white;
     cursor: not-allowed;
 }
@@ -175,7 +223,7 @@ background-color: rgba(255, 255, 255, 0.05);
 }
 .locked-content {
     text-align: center;
-    color: #777;
+    color: #94a3b8;
 }
 .locked-icon {
     font-size: 1.5em;
@@ -185,17 +233,19 @@ background-color: rgba(255, 255, 255, 0.05);
 .locked-price {
     color: var(--gold-color);
     font-weight: bold;
+    font-family: 'Cinzel', serif;
 }
 .portrait-image {
     width: 50px;
     height: 50px;
-    background-color: #555;
+    background-color: #1e293b;
     border-radius: 50%;
     margin-right: 10px;
     border: 2px solid var(--border-color);
     background-size: cover;
     background-position: center;
     flex-shrink: 0;
+    box-shadow: 0 0 5px var(--blue-decals);
 }
 
 .portrait-info {
@@ -206,6 +256,7 @@ background-color: rgba(255, 255, 255, 0.05);
 }
 
 .portrait-name {
+    font-family: 'Cinzel', serif;
     font-weight: bold;
     font-size: 1em;
     color: var(--gold-color);
@@ -230,36 +281,37 @@ background-color: rgba(255, 255, 255, 0.05);
     grid-template-columns: 1fr 1fr 1fr; /* 3 colunas */
     gap: 2px;
     font-size: 0.75em;
-    color: #ccc;
+    color: #cbd5e1;
 }
 
 /* Barra de XP */
 .portrait-xp-container {
     width: 100%;
-    height: 14px;
-    background-color: #111;
+    height: 10px; /* Mais fina */
+    background-color: #0f172a;
     border-radius: 7px;
     position: relative;
     overflow: hidden;
     margin-top: 5px;
-    border: 1px solid #444;
+    border: 1px solid #334155;
 }
 
 .portrait-xp-fill {
     height: 100%;
-    background-color: #9b59b6; /* Roxo para XP */
+    background-color: #a855f7; /* Roxo para XP (ajustado para vibrante) */
     width: 0%;
     transition: width 0.3s;
+    box-shadow: 0 0 5px #a855f7;
 }
 
 .portrait-xp-text {
     position: absolute;
-    top: 0;
+    top: -1px;
     left: 0;
     width: 100%;
     text-align: center;
-    font-size: 0.7em;
-    line-height: 14px;
+    font-size: 0.6em;
+    line-height: 10px;
     color: white;
     font-weight: bold;
     text-shadow: 1px 1px 2px black;
@@ -294,9 +346,9 @@ background-color: rgba(255, 255, 255, 0.05);
     position: relative; 
     
     background-color: var(--card-bg);
-    border: 2px solid var(--border-color);
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+    border: 1px solid #7f1d1d; /* Borda vermelha escura para inimigos */
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
     
     display: flex;
     flex-direction: column;
@@ -315,7 +367,7 @@ background-color: rgba(255, 255, 255, 0.05);
     width: 30px;
     height: 30px;
     background-color: var(--enemy-color);
-    border: 2px solid var(--enemy-shadow-color);
+    border: 2px solid #450a0a;
     border-radius: 50%;
     display: flex;
     justify-content: center;
@@ -332,7 +384,7 @@ background-color: rgba(255, 255, 255, 0.05);
     gap: 4px;
     width: 100%;
     margin-bottom: 6px;
-    background-color: rgba(0, 0, 0, 0.2);
+    background-color: rgba(0, 0, 0, 0.3);
     padding: 4px;
     border-radius: 6px;
 }
@@ -342,7 +394,7 @@ background-color: rgba(255, 255, 255, 0.05);
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #ccc;
+    color: #cbd5e1;
 }
 
 .enemy-skills-footer {
@@ -351,7 +403,7 @@ background-color: rgba(255, 255, 255, 0.05);
     text-align: center;
     font-size: 0.85em;
     color: var(--mana-color);
-    border-top: 1px dashed rgba(255,255,255,0.2);
+    border-top: 1px dashed rgba(255,255,255,0.1);
     padding-top: 4px;
     cursor: help;
     position: relative;
@@ -373,7 +425,7 @@ background-color: rgba(255, 255, 255, 0.05);
     left: 50%;
     transform: translateX(-50%);
     width: 180px;
-    background-color: #111;
+    background-color: #0f172a;
     border: 1px solid var(--mana-color);
     padding: 8px;
     border-radius: 5px;
@@ -381,6 +433,7 @@ background-color: rgba(255, 255, 255, 0.05);
     color: #eee;
     text-align: left;
     box-shadow: 0 4px 10px rgba(0,0,0,0.8);
+    font-family: 'Lato', sans-serif;
 }
 
 .enemy-skills-footer:hover .enemy-skills-tooltip {
@@ -388,35 +441,40 @@ background-color: rgba(255, 255, 255, 0.05);
 }
 .enemy-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 0 15px var(--enemy-color);
-    border-color: var(--enemy-shadow-color);
+    box-shadow: 0 0 20px rgba(220, 38, 38, 0.5); /* Glow vermelho */
+    border-color: var(--hp-color);
 }
 
 .enemy-name {
+    font-family: 'Cinzel', serif;
     font-weight: bold;
     margin-bottom: 10px;
+    color: #fecaca; /* Vermelho claro */
 }
 
 .enemy-sprite {
     width: 100px;
     height: 100px;
-    background-color: #555; /* Placeholder da arte */
+    background-color: #1e293b; /* Placeholder da arte */
     border-radius: 5px;
     margin-bottom: 10px;
+    border: 1px solid #450a0a;
 }
 
 .hp-bar {
     width: 100%;
     height: 10px;
-    background-color: #333;
+    background-color: #1e293b;
     border-radius: 5px;
     overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.1);
 }
 
 .hp-bar-current {
     width: 100%; /* JS vai mudar isso */
     height: 100%;
     background-color: var(--hp-color);
+    box-shadow: 0 0 5px var(--hp-color);
 }
 
 /* Área do Jogador (Baixo) */
@@ -439,9 +497,9 @@ background-color: rgba(255, 255, 255, 0.05);
     z-index: 2; 
     
     background-color: var(--card-bg);
-    border: 2px solid var(--border-color);
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
     
     display: flex;
     flex-direction: column;
@@ -449,22 +507,26 @@ background-color: rgba(255, 255, 255, 0.05);
 
     padding: 8px 8px 12px 8px; 
     box-sizing: border-box;
+    transition: all 0.2s ease;
 }
 
 /* Nome (Acima da Foto) */
 .player-name {
+    font-family: 'Cinzel', serif;
     font-weight: bold;
     text-align: center;
     width: 100%;
     font-size: 0.9em;
     margin-bottom: 5px;
+    color: var(--gold-color);
+    text-shadow: 0 0 5px rgba(251, 191, 36, 0.3);
 }
 
 /* Sprite (Foto) */
 .player-sprite {
     width: 90%; /* Ocupa 90% da largura da carta */
     aspect-ratio: 1 / 1; /* Força a ser um quadrado */
-    background-color: #555;
+    background-color: #1e293b;
     background-size: cover; /* Garante que a imagem não deforme */
     background-position: center;
     border-radius: 5px;
@@ -485,7 +547,8 @@ background-color: rgba(255, 255, 255, 0.05);
     width: 100%;
     font-size: 0.80em; 
     font-weight: bold;
-    color: #ccc;
+    color: #94a3b8;
+    font-family: 'Cinzel', serif;
     
     display: flex;
     justify-content: center;
@@ -506,6 +569,7 @@ background-color: rgba(255, 255, 255, 0.05);
     font-weight: bold;
     color: var(--orange-color);
     text-align: center;
+    text-shadow: 0 0 5px rgba(249, 115, 22, 0.3);
 }
 .player-action-bar {
     display: flex;
@@ -519,14 +583,14 @@ background-color: rgba(255, 255, 255, 0.05);
     font-size: 1.5em; 
     cursor: pointer;
     padding: 5px;
-    background-color: rgba(0, 0, 0, 0.2);
+    background-color: rgba(0, 0, 0, 0.3);
     border-radius: 5px;
     border: 3px solid transparent;
     transition: all 0.2s ease;
 }
 
 .action-icon:hover {
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(59, 130, 246, 0.2);
 }
 
 .action-icon.selected {
@@ -536,9 +600,9 @@ background-color: rgba(255, 255, 255, 0.05);
 }
 
 .action-icon.action-defined {
-    border-color: #4CAF50;
-    background-color: rgba(76, 175, 80, 0.3);
-    box-shadow: 0 0 10px #4CAF50;
+    border-color: var(--success-color);
+    background-color: rgba(16, 185, 129, 0.2);
+    box-shadow: 0 0 10px var(--success-color);
     transform: scale(1.1);
 }
 
@@ -546,11 +610,11 @@ background-color: rgba(255, 255, 255, 0.05);
 .stat-bar-container {
     width: 100%;
     height: 20px;
-    background-color: #222; /* Fundo escuro da barra */
+    background-color: #0f172a; /* Fundo escuro da barra */
     border-radius: 5px;
     position: relative; /* CRUCIAL para sobrepor os elementos */
     overflow: hidden; /* Garante que a barra de fill não saia */
-    border: 1px solid #111;
+    border: 1px solid #334155;
     margin-bottom: 4px; /* Um pouco de espaço entre as barras */
 }
 
@@ -563,6 +627,7 @@ background-color: rgba(255, 255, 255, 0.05);
     color: white;
     text-shadow: 1px 1px 2px black; /* Sombra para legibilidade */
     line-height: 18px; /* Centraliza verticalmente */
+    font-family: 'Lato', sans-serif;
 }
 
 .hp-text {
@@ -583,8 +648,8 @@ background-color: rgba(255, 255, 255, 0.05);
     font-size: 0.8em;
     font-weight: bold;
     line-height: 18px;
-    color: var(--mana-color); /* Azul, como pedido */
-    -webkit-text-stroke: 1px rgb(12, 57, 94); /* Contorno preto */
+    color: #60a5fa; /* Azul claro */
+    text-shadow: 0 0 3px #1e3a8a;
 }
 
 /* Barras de 'Fill' (HP e Mana) */
@@ -600,10 +665,12 @@ background-color: rgba(255, 255, 255, 0.05);
 
 .hp-bar-fill {
     background-color: var(--hp-color);
+    box-shadow: inset 0 2px 0 rgba(255,255,255,0.2);
 }
 
 .mana-bar-fill {
     background-color: var(--mana-color);
+    box-shadow: inset 0 2px 0 rgba(255,255,255,0.2);
 }
 
 /* Efeitos (Buffs/Debuffs) */
@@ -618,10 +685,11 @@ background-color: rgba(255, 255, 255, 0.05);
 
 .effect-icon {
     font-size: 0.9em;
-    background-color: rgba(0, 0, 0, 0.4);
+    background-color: rgba(15, 23, 42, 0.7);
     padding: 2px;
     border-radius: 3px;
     line-height: 1;
+    border: 1px solid #334155;
 }
 /* =================================
    Ícones (Habilidades e Recrutar)
@@ -633,14 +701,16 @@ background-color: rgba(255, 255, 255, 0.05);
     padding: 15px;
     background-color: rgba(0, 0, 0, 0.2);
     transition: background-color 0.2s;
+    color: var(--text-color);
 }
 
 .panel-icon:hover {
-    background-color: var(--border-color);
+    background-color: rgba(59, 130, 246, 0.1);
+    color: var(--border-color);
 }
 
 #skills-icon {
-    border-top: 2px solid var(--border-color);
+    border-top: 1px solid var(--border-color);
 }
 
 #recruit-icon {
@@ -649,24 +719,38 @@ background-color: rgba(255, 255, 255, 0.05);
     right: 20px;
     z-index: 50;
 
-    background-color: var(--panel-bg);
-    border: 2px solid var(--gold-color);
-    color: var(--gold-color);
-    border-radius: 8px;
-    padding: 12px 20px; 
+    /* Estilo Botão "Next Step" da Criação */
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    border-radius: 50px; /* Pill shape */
+    padding: 12px 30px; 
     
+    font-family: 'Cinzel', serif;
     font-size: 1.1em;
-    font-weight: bold;
+    font-weight: 800;
     text-align: center;
     text-transform: uppercase; 
+    letter-spacing: 1px;
     
     cursor: pointer;
-    transition: background-color 0.2s, color 0.2s;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    
+    box-shadow: 
+        0 4px 15px rgba(16, 185, 129, 0.4),
+        inset 0 2px 0 rgba(255, 255, 255, 0.3);
 }
 
 #recruit-icon:hover {
-    background-color: var(--gold-color);
-    color: var(--panel-bg); 
+    transform: translateY(-4px) scale(1.02);
+    background: linear-gradient(135deg, #34d399 0%, #059669 100%);
+    box-shadow: 
+        0 10px 30px rgba(16, 185, 129, 0.6),
+        inset 0 2px 0 rgba(255, 255, 255, 0.4);
+    color: white; 
+}
+#recruit-icon:active {
+    transform: translateY(2px) scale(0.98);
 }
 
 /* =================================
@@ -684,6 +768,7 @@ background-color: rgba(255, 255, 255, 0.05);
     width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.7); /* Fundo escuro */
+    backdrop-filter: blur(4px);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -692,8 +777,9 @@ background-color: rgba(255, 255, 255, 0.05);
 
 .modal-content {
     background-color: var(--panel-bg);
-    border: 2px solid var(--border-color);
-    border-radius: 10px;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+    border-radius: 16px;
     padding: 20px;
     width: 400px;
     position: relative;
@@ -704,15 +790,20 @@ background-color: rgba(255, 255, 255, 0.05);
     position: absolute;
     top: 10px;
     right: 10px;
-    background-color: var(--hp-color);
-    color: white;
-    border: none;
+    background-color: transparent;
+    color: var(--hp-color);
+    border: 1px solid var(--hp-color);
     border-radius: 50%;
     width: 30px;
     height: 30px;
     font-size: 1.2em;
     font-weight: bold;
     cursor: pointer;
+    transition: all 0.2s;
+}
+.close-panel-btn:hover {
+    background-color: var(--hp-color);
+    color: white;
 }
 
 .panel-content {
@@ -723,8 +814,8 @@ background-color: rgba(255, 255, 255, 0.05);
 }
 
 .mercenary-for-hire {
-    background-color: rgba(30, 30, 40, 0.95);
-    border: 1px solid var(--border-color);
+    background-color: rgba(30, 41, 59, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 8px;
     padding: 10px;
     margin-bottom: 15px;
@@ -738,14 +829,23 @@ background-color: rgba(255, 255, 255, 0.05);
 .mercenary-for-hire:hover {
     border-color: var(--gold-color);
     transform: translateX(-5px); /* Efeito de destaque */
+    background-color: rgba(30, 41, 59, 0.8);
 }
 .recruit-btn {
-    background-color: var(--gold-color);
-    color: var(--bg-color);
+    background: linear-gradient(135deg, var(--gold-color), #d97706);
+    color: #0f172a;
     border: none;
-    padding: 5px 10px;
-    border-radius: 3px;
+    padding: 5px 15px;
+    border-radius: 20px;
     cursor: pointer;
+    font-weight: bold;
+    font-family: 'Cinzel', serif;
+    box-shadow: 0 0 5px rgba(251, 191, 36, 0.5);
+    transition: all 0.2s;
+}
+.recruit-btn:hover {
+    filter: brightness(1.1);
+    box-shadow: 0 0 10px rgba(251, 191, 36, 0.8);
 }
 
 /* =================================
@@ -754,18 +854,21 @@ background-color: rgba(255, 255, 255, 0.05);
 #enemy-tooltip {
     position: absolute;
     /* JS vai controlar 'top' e 'left' */
-    background-color: #111;
-    border: 1px solid #777;
-    border-radius: 5px;
+    background-color: #0f172a;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
     padding: 10px;
     width: 200px;
     z-index: 101; /* Na frente do modal (se houver) */
     font-size: 0.9em;
     pointer-events: none; /* Para o mouse passar "através" dele */
+    box-shadow: 0 4px 15px rgba(0,0,0,0.8);
+    font-family: 'Lato', sans-serif;
 }
 #enemy-tooltip h4 {
     margin-top: 0;
     color: var(--hp-color);
+    font-family: 'Cinzel', serif;
 }
 
 /* Painel Lateral (Recrutar) */
@@ -776,11 +879,12 @@ background-color: rgba(255, 255, 255, 0.05);
     width: 300px;
     height: 100vh; 
     background-color: var(--panel-bg);
-    border-left: 2px solid var(--border-color);
-    box-shadow: -5px 0 15px rgba(0, 0, 0, 0.5);
+    border-left: 1px solid var(--border-color);
+    box-shadow: -5px 0 25px rgba(0, 0, 0, 0.7);
     display: flex;
     flex-direction: column;
     z-index: 200;
+    backdrop-filter: blur(10px);
 
     transform: translateX(100%);
     
@@ -794,14 +898,15 @@ background-color: rgba(255, 255, 255, 0.05);
 
 /*ouro do jogador*/
 #player-gold-display {
-    background-color: var(--panel-bg);
-    border: 2px solid var(--gold-color);
-    border-radius: 8px;
+    background-color: rgba(15, 23, 42, 0.8);
+    border: 1px solid var(--gold-color);
+    border-radius: 20px;
     padding: 10px 15px;
     font-size: 1.2em;
+    font-family: 'Cinzel', serif;
     font-weight: bold;
     color: var(--gold-color);
-    box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+    box-shadow: 0 0 10px rgba(251, 191, 36, 0.3);
     
     white-space: nowrap; 
 }
@@ -820,9 +925,10 @@ body.shop-is-open #player-gold-display {
     border: 1px solid var(--border-color);
     
     font-size: 1.4em; 
+    font-family: 'Cinzel', serif;
     font-weight: bold;
     color: var(--gold-color); 
-    text-shadow: 0 0 5px rgba(0,0,0,0.7);
+    text-shadow: 0 0 5px rgba(251, 191, 36, 0.5);
 }
 
 #round-display {
@@ -835,41 +941,52 @@ body.shop-is-open #player-gold-display {
     border: none;
     
     font-size: 1.2em; 
+    font-family: 'Cinzel', serif;
     font-weight: bold;
     color: var(--text-color); 
-    text-shadow: var(--blue-decals);
+    text-shadow: 0 0 5px var(--blue-decals);
 }
 #start-battle-btn {
-    background-color: var(--hp-color); 
+    /* Estilo "Start" do Char Creation */
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%); 
     color: white;
     
+    font-family: 'Cinzel', serif;
     font-size: 1.2em; 
-    font-weight: bold;
-    padding: 10px 15px; 
-    border-radius: 8px; 
+    font-weight: 800;
+    padding: 12px 25px; 
+    border-radius: 50px; 
     
     text-transform: uppercase;
-    border: none;
+    border: 1px solid rgba(255,255,255,0.2);
     cursor: pointer;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
-    transition: background-color 0.2s, transform 0.1s;
+    box-shadow: 
+        0 4px 15px rgba(16, 185, 129, 0.4),
+        inset 0 2px 0 rgba(255, 255, 255, 0.3);
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
     
     white-space: nowrap; 
+    letter-spacing: 1px;
 }
 
 #start-battle-btn:hover:not(:disabled) {
-    background-color: #ff6b5a;
-    transform: scale(1.02);
+    background: linear-gradient(135deg, #34d399 0%, #059669 100%);
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: 
+        0 10px 30px rgba(16, 185, 129, 0.6),
+        inset 0 2px 0 rgba(255, 255, 255, 0.4);
 }
 
 #start-battle-btn:active:not(:disabled) {
-    transform: scale(0.98); 
+    transform: translateY(2px) scale(0.98); 
 }
 
 #start-battle-btn:disabled {
-    background-color: #555;
-    color: #999;
+    background: #1e293b;
+    color: #475569;
     cursor: not-allowed;
+    box-shadow: none;
+    border-color: transparent;
 }
 #top-right-ui {
     position: absolute;
@@ -901,14 +1018,16 @@ body.targeting-active {
     top: -100px; 
     opacity: 0;
     
-    background-color: var(--enemy-shadow-color); 
+    background-color: rgba(15, 23, 42, 0.9); 
     color: var(--gold-color); 
     padding: 15px 25px;
-    border: 2px solid var(--border-color);
+    border: 1px solid var(--border-color);
     border-top: none; 
     border-radius: 0 0 10px 10px; 
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(5px);
     
+    font-family: 'Cinzel', serif;
     font-size: 1.1em;
     font-weight: bold;
     text-align: center;
@@ -931,11 +1050,11 @@ body.targeting-active {
     left: 0;
     width: 100%;
     height: 100vh;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(0, 0, 0, 0.6);
     z-index: 100; 
     
     
-    backdrop-filter: blur(4px);
+    backdrop-filter: blur(6px);
     
     
     opacity: 0;
@@ -963,7 +1082,7 @@ body.targeting-enemy .enemy-card {
 }
 
 body.targeting-enemy .enemy-card:hover {
-    background-color: #5e2a2a; 
+    background-color: rgba(153, 27, 27, 0.3); 
     border-color: var(--hp-color);
     box-shadow: 0 0 25px var(--hp-color);
     transform: translateY(-5px) scale(1.05);
@@ -984,9 +1103,9 @@ body.targeting-ally .player-card {
 }
 
 body.targeting-ally .player-card:hover {
-    background-color: #2a5e3a; 
-    border-color: #4CAF50;
-    box-shadow: 0 0 20px #4CAF50;
+    background-color: rgba(16, 185, 129, 0.2); 
+    border-color: #10b981;
+    box-shadow: 0 0 20px #10b981;
 }
 
 body.targeting-enemy .player-card.is-targeting,
@@ -1008,10 +1127,11 @@ body.targeting-ally .player-card.is-targeting {
     position: absolute;
     width: 180px;
     background-color: var(--panel-bg);
-    border: 2px solid var(--gold-color);
+    border: 1px solid var(--gold-color);
     border-radius: 8px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.7);
     z-index: 110;
+    backdrop-filter: blur(5px);
     
     opacity: 0;
     pointer-events: none;
@@ -1028,7 +1148,8 @@ body.targeting-ally .player-card.is-targeting {
     color: var(--text-color);
     cursor: pointer;
     font-weight: bold;
-    border-bottom: 1px solid var(--border-color);
+    font-family: 'Lato', sans-serif;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
     transition: background-color 0.2s;
 }
 .skill-popup-item:last-child {
@@ -1036,11 +1157,12 @@ body.targeting-ally .player-card.is-targeting {
 }
 
 .skill-popup-item:hover {
-    background-color: var(--card-bg);
+    background-color: rgba(251, 191, 36, 0.1);
+    color: var(--gold-color);
 }
 
 .skill-popup-item.disabled {
-    color: #777;
+    color: #64748b;
     cursor: not-allowed;
     background-color: transparent;
 }
@@ -1060,10 +1182,11 @@ body.targeting-ally .player-card.is-targeting {
 
 #turn-order-label {
     font-weight: bold;
-    color: #ccc;
+    color: #94a3b8;
     margin-right: 15px;
     text-transform: uppercase;
     font-size: 0.9em;
+    font-family: 'Cinzel', serif;
 }
 
 #turn-order-list {
@@ -1077,7 +1200,7 @@ body.targeting-ally .player-card.is-targeting {
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    background-color: transparent;
+    background-color: rgba(15, 23, 42, 0.5);
     border: 2px solid #fff;
     display: flex;
     justify-content: center;
@@ -1087,19 +1210,22 @@ body.targeting-ally .player-card.is-targeting {
     font-size: 1.2em;
     flex-shrink: 0; 
     transition: transform 0.2s;
+    box-shadow: 0 0 5px rgba(0,0,0,0.5);
 }
 
 .turn-order-item.ally {
-    border-color: green;
+    border-color: var(--success-color);
+    box-shadow: 0 0 8px var(--success-color);
 }
 
 .turn-order-item.enemy {
     border-color: var(--hp-color);
+    box-shadow: 0 0 8px var(--hp-color);
 }
 
 #turn-order-tooltip {
     position: absolute;
-    background-color: #111;
+    background-color: #0f172a;
     border: 1px solid var(--gold-color);
     border-radius: 5px;
     padding: 10px;
@@ -1110,6 +1236,7 @@ body.targeting-ally .player-card.is-targeting {
     white-space: normal; 
     color: var(--light-text-color);
     text-align: left;
+    font-family: 'Lato', sans-serif;
 }
 
 #turn-order-tooltip.hidden {
@@ -1122,10 +1249,11 @@ body.targeting-ally .player-card.is-targeting {
     color: var(--gold-color);
     font-size: 1.1em;
     margin-bottom: 5px;
+    font-family: 'Cinzel', serif;
 }
 #turn-order-tooltip .tooltip-turn-stat {
     display: block;
-    color: #ccc;
+    color: #cbd5e1;
 }
 
 /* Animacoes de batalha */
@@ -1170,7 +1298,7 @@ body.targeting-ally .player-card.is-targeting {
 .is-taking-damage {
     animation: take-damage-shake 0.3s ease-in-out;
     
-    box-shadow: 0 0 20px 10px rgba(255, 50, 50, 0.7) !important;
+    box-shadow: 0 0 20px 10px rgba(239, 68, 68, 0.7) !important;
 }
 @keyframes fade-up-out {
     0% {
@@ -1193,6 +1321,7 @@ body.targeting-ally .player-card.is-targeting {
     z-index: 105; 
     font-size: 1.8em;
     font-weight: bold;
+    font-family: 'Cinzel', serif;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
     pointer-events: none; 
     opacity: 0; /* Começa invisível */
@@ -1210,32 +1339,35 @@ body.targeting-ally .player-card.is-targeting {
     font-size: 2.5em; 
     transform: translate(-50%, -10px); 
     font-style: oblique;
+    text-shadow: 0 0 10px var(--orange-color);
 }
 .combat-text-popup.miss {
-    color: #8897c0;
+    color: #94a3b8;
     font-size: 2.0em;
     transform: translate(-50%, -15px); 
     font-style: italic;
 }
 
 .combat-text-popup.heal {
-    color: greenyellow;
+    color: #4ade80;
     font-size: 1.6em;
+    text-shadow: 0 0 10px #4ade80;
 }
 
 .combat-text-popup.mana {
     color: var(--mana-color); 
     font-size: 1.6em;
+    text-shadow: 0 0 10px var(--mana-color);
 }
 
 .combat-text-popup.buff {
-    color: rgb(47, 85, 255);
+    color: #60a5fa;
     font-style: italic;
     font-size: 1.1em;
 }
 
 .combat-text-popup.debuff {
-    color: #e04024; 
+    color: #f87171; 
     font-style: italic;
     font-size: 1.1em;
 }
@@ -1281,6 +1413,7 @@ body.targeting-ally .player-card.is-targeting {
     font-weight: bold;
     margin-bottom: 20px;
     color: var(--success-color);
+    font-family: 'Cinzel', serif;
 }
 #lvlup-points-display span {
     font-size: 1.5em;
@@ -1298,12 +1431,14 @@ body.targeting-ally .player-card.is-targeting {
     justify-content: space-between;
     align-items: center;
     padding: 10px;
-    background-color: var(--card-bg);
+    background-color: rgba(30, 41, 59, 0.5);
     border-radius: 5px;
+    border: 1px solid rgba(255,255,255,0.05);
 }
 .levelup-stat-row span {
     font-size: 1.1em;
     font-weight: bold;
+    font-family: 'Lato', sans-serif;
 }
 
 .levelup-stat-row .stat-controls {
@@ -1344,6 +1479,7 @@ body.targeting-ally .player-card.is-targeting {
     font-weight: bold;
     font-size: 1.1em;
     color: var(--text-color);
+    font-family: 'Cinzel', serif;
 }
 .merc-vocation {
     font-size: 0.9em;
@@ -1357,11 +1493,12 @@ body.targeting-ally .player-card.is-targeting {
 
 .merc-subtext {
     font-size: 0.85em;
-    color: orange;
+    color: var(--orange-color);
 }
 .merc-tier {
     color: var(--gold-color);
     font-weight: bold;
+    font-family: 'Cinzel', serif;
 }
 
 .merc-stats-grid {
@@ -1404,6 +1541,7 @@ body.targeting-ally .player-card.is-targeting {
 .mercenary-cost {
     font-weight: bold;
     color: var(--gold-color);
+    font-family: 'Cinzel', serif;
 }
 
 .merc-skills-container {
@@ -1421,7 +1559,7 @@ body.targeting-ally .player-card.is-targeting {
     bottom: 100%;
     left: 0;
     width: 200px;
-    background-color: #111;
+    background-color: #0f172a;
     border: 1px solid var(--mana-color);
     padding: 8px;
     border-radius: 5px;
@@ -1439,11 +1577,11 @@ body.targeting-ally .player-card.is-targeting {
 
 /* cores especificas para cada atributo */
 
-.merc-stat-item[data-stat="str"] span { color: #e74c3c; }
-.merc-stat-item[data-stat="con"] span { color: #e67e22; }
-.merc-stat-item[data-stat="agi"] span { color: #f1c40f; }
-.merc-stat-item[data-stat="int"] span { color: #3498db; }
-.merc-stat-item[data-stat="wis"] span { color: #9b59b6; }
+.merc-stat-item[data-stat="str"] span { color: #ef4444; }
+.merc-stat-item[data-stat="con"] span { color: #f97316; }
+.merc-stat-item[data-stat="agi"] span { color: #fbbf24; }
+.merc-stat-item[data-stat="int"] span { color: #3b82f6; }
+.merc-stat-item[data-stat="wis"] span { color: #a855f7; }
 
 .merc-price-action {
     display: flex;
@@ -1459,15 +1597,16 @@ body.targeting-ally .player-card.is-targeting {
 
 /* botoes da loja */
 .recruit-btn.confirm {
-    background-color: green;
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
     color: white;
     animation: pulse 0.8s infinite;
 }
 
 .recruit-btn.error {
-    background-color: var(--hp-color);
+    background: linear-gradient(135deg, #ef4444 0%, #b91c1c 100%);
     color: white;
     cursor: not-allowed;
+    box-shadow: none;
 }
 
 #recruit-icon.locked {
@@ -1479,8 +1618,8 @@ body.targeting-ally .player-card.is-targeting {
 .reward-card {
     flex: 1;
     background-color: var(--card-bg);
-    border: 2px solid var(--border-color);
-    border-radius: 10px;
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
     padding: 20px;
     text-align: center;
     cursor: pointer;
@@ -1489,28 +1628,31 @@ body.targeting-ally .player-card.is-targeting {
     flex-direction: column;
     gap: 10px;
     align-items: center;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
 }
 
 .reward-card:hover {
     transform: translateY(-10px);
     border-color: var(--gold-color);
-    box-shadow: 0 0 15px var(--gold-color);
+    box-shadow: 0 0 25px rgba(251, 191, 36, 0.4);
 }
 
 .reward-icon {
     font-size: 3em;
     margin-bottom: 10px;
+    text-shadow: 0 0 10px var(--gold-color);
 }
 
 .reward-title {
     font-weight: bold;
     font-size: 1.2em;
     color: var(--light-text-color);
+    font-family: 'Cinzel', serif;
 }
 
 .reward-desc {
     font-size: 0.9em;
-    color: #ccc;
+    color: #94a3b8;
 }
 
 @keyframes pulse {
@@ -1528,7 +1670,7 @@ body.targeting-ally .player-card.is-targeting {
     right: 0;     /* Alinhado à direita */
     
     /* Estilo Visual (Igual aos seus outros tooltips) */
-    background-color: #111;
+    background-color: #0f172a;
     color: var(--text-color); /* ou var(--gold-color) se preferir destaque */
     border: 1px solid var(--border-color);
     border-radius: 5px;
@@ -1541,6 +1683,7 @@ body.targeting-ally .player-card.is-targeting {
     box-shadow: 0 4px 10px rgba(0,0,0,0.5);
     z-index: 1000;
     pointer-events: none;
+    font-family: 'Lato', sans-serif;
 }
 
 .combat-stats-grid {
@@ -1549,7 +1692,7 @@ body.targeting-ally .player-card.is-targeting {
     gap: 4px;
     width: 100%;
     margin-bottom: 6px;
-    background-color: rgba(0, 0, 0, 0.2);
+    background-color: rgba(0, 0, 0, 0.3);
     padding: 4px;
     border-radius: 6px;
 }
@@ -1559,7 +1702,7 @@ body.targeting-ally .player-card.is-targeting {
     align-items: center;
     justify-content: center;
     font-size: 0.75em; /* Fonte pequena para caber */
-    color: #ccc;
+    color: #cbd5e1;
     white-space: nowrap; /* Não quebra linha */
 }
 
@@ -1569,21 +1712,22 @@ body.targeting-ally .player-card.is-targeting {
 }
 
 .c-stat[title="Ataque"] { color: var(--orange-color); font-weight: bold; }
-.c-stat[title="Chance Crítica"] { color: #ffeb3b; } 
-.c-stat[title="Multiplicador Crítico"] { color: #ff5722; } 
-.c-stat[title="Esquiva"] { color: #00bcd4; }
+.c-stat[title="Chance Crítica"] { color: #fbbf24; } 
+.c-stat[title="Multiplicador Crítico"] { color: #f97316; } 
+.c-stat[title="Esquiva"] { color: #22d3ee; }
 
 .game-over-title {
     font-size: 3em;
     color: var(--hp-color);
     margin: 0 0 20px 0;
     text-transform: uppercase;
-    text-shadow: 0 0 10px rgba(231, 76, 60, 0.5);
+    text-shadow: 0 0 15px rgba(239, 68, 68, 0.6);
     letter-spacing: 5px;
+    font-family: 'Cinzel', serif;
 }
 
 .game-over-stats p {
-    color: #ccc;
+    color: #cbd5e1;
     font-size: 1.1em;
     margin: 0;
 }
@@ -1592,6 +1736,7 @@ body.targeting-ally .player-card.is-targeting {
     font-size: 2.5em;
     color: white;
     margin: 10px 0 20px 0;
+    font-family: 'Cinzel', serif;
 }
 
 .game-over-record {
@@ -1609,6 +1754,7 @@ body.targeting-ally .player-card.is-targeting {
     color: var(--gold-color);
     animation: pulse 1s infinite;
     border: 1px solid var(--gold-color);
+    box-shadow: 0 0 10px rgba(251, 191, 36, 0.4);
 }
 
 .record-comparison {
@@ -1620,7 +1766,7 @@ body.targeting-ally .player-card.is-targeting {
 /* Texto do Recorde Antigo*/
 .old-record-text {
     font-size: 0.8em;
-    color: #888; /* Cinza */
+    color: #64748b; /* Cinza slate */
     text-transform: uppercase;
     letter-spacing: 1px;
 }
@@ -1630,5 +1776,6 @@ body.targeting-ally .player-card.is-targeting {
     font-size: 1.3em;
     color: var(--gold-color);
     font-weight: bold;
-    text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+    text-shadow: 0 0 10px rgba(251, 191, 36, 0.5);
+    font-family: 'Cinzel', serif;
 }
