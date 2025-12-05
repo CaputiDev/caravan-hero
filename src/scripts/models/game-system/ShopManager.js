@@ -13,9 +13,9 @@ ShopManager.prototype.generateShop = async function() {
         const merc = await MERCENARY_GENERATOR.generateMercenary();
         
         // Calcula o preço
-        // Preço = Base (50) + (Nível * 50) + (Total de Atributos * 10)
+        // Preço = Base (25) + (Nível * 25) + (Total de Atributos * 5)
         const totalStats = Object.values(merc.attributes).reduce((a,b)=>a+b, 0);
-        merc.cost = 50 + (merc.lvl * 50) + (totalStats * 10);
+        merc.cost = 25 + (merc.lvl * 25) + (totalStats * 5);
 
         this.shopInventory.push(merc);
     }

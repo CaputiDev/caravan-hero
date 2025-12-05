@@ -103,6 +103,7 @@ BattleManager.prototype.processAllyActions = function(character){
                 
                 if (attackResult.didKill) {
                     character.gainExperience(target.xpGiven);
+                    PLAYER_MANAGER.addGold(target.goldGiven);
                     playDeathAnimation(targetCard, () => {
                         removeEnemyFromSquad(target);
                     });
@@ -144,6 +145,7 @@ BattleManager.prototype.processAllyActions = function(character){
                         showCombatText(targetCard, skillResult.amount, 'damage');
                         playAnimation(targetCard, 'is-taking-damage', 300);
                         if (skillResult.didKill) {
+                            PLAYER_MANAGER.addGold(target.goldGiven);
                             character.gainExperience(target.xpGiven);
                             playDeathAnimation(targetCard, () => {
                                 removeEnemyFromSquad(target);
@@ -196,6 +198,9 @@ BattleManager.prototype.processAllEffects = function(){
                 
                 if (caster && caster instanceof PCharacter && character.xpGiven) {
                     caster.gainExperience(character.xpGiven);
+                }
+                if (caster && caster instanceof PCharacter && character.goldGiven) {
+                    PLAYER_MANAGER.addGold(character.goldGiven);
                 }
                 
                 playDeathAnimation(combatantCard, () => {

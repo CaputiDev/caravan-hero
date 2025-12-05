@@ -7,6 +7,8 @@ class Enemy extends Character {
         this.classIcon = classIcon;
 
         this.xpGiven = lvl * 100 * tier;
+
+        this.goldGiven = lvl * Math.ceil(Math.random()*100) * tier;
         
     }
 }
